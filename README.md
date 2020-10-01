@@ -41,6 +41,7 @@ As part of the build, [gxml](https://gitlab.gnome.org/GNOME/gxml) will be cloned
 
 ```
 $ meson build && cd build
+$ meson configure -Dprefix=/usr
 $ ninja
 $ sudo ninja install
 $ io.github.thiefmd.themegenerator
