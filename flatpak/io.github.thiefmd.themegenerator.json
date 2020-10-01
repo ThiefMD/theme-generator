@@ -1,0 +1,52 @@
+{
+    "app-id":"io.github.thiefmd.themegenerator",
+    "runtime":"org.gnome.Platform",
+    "runtime-version":"3.38",
+    "sdk":"org.gnome.Sdk",
+    "command":"io.github.thiefmd.themegenerator",
+    "finish-args":[
+        "--share=ipc",
+        "--device=dri",
+        "--socket=fallback-x11",
+        "--socket=x11"
+    ],
+    "cleanup":[
+        "/cache",
+        "/man",
+        "/share/aclocal",
+        "/share/devhelp",
+        "/lib/systemd",
+        "/include",
+        "/lib/pkgconfig",
+        "/lib/libvala*",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/vala",
+        "/bin/vapi*",
+        "*.a",
+        "*.la"
+    ],
+    "modules":[
+        {
+        "name": "gtksourceview",
+        "config-opts": [
+            "--disable-gtk-doc"
+        ],
+        "sources": [{
+            "type": "archive",
+            "url": "https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-3.24.11.tar.xz",
+            "sha256": "691b074a37b2a307f7f48edc5b8c7afa7301709be56378ccf9cc9735909077fd"
+        }]
+        },
+        {
+        "name":"themegenerator",
+        "buildsystem":"meson",
+        "sources":[
+            {
+            "type":"dir",
+            "path":".."
+            }
+        ]
+        }
+    ]
+}

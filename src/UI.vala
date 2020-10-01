@@ -5,10 +5,7 @@ namespace ThiefMD {
         string ext)
     {
         var action = Gtk.FileChooserAction.SAVE;
-        var chooser = new Gtk.FileChooserDialog (title, null, action);
-
-        chooser.add_button ("_Cancel", Gtk.ResponseType.CANCEL);
-        chooser.add_button ("_Save", Gtk.ResponseType.ACCEPT);
+        var chooser = new Gtk.FileChooserNative (title, null, action, "_Save", "_Cancel");
         chooser.set_do_overwrite_confirmation (true);
 
         chooser.action = action;
