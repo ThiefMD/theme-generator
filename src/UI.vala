@@ -116,8 +116,20 @@ namespace ThiefMD {
     public class PalletPopover : Gtk.Popover {
         public signal void clicked ();
         public int value;
-        private Gtk.Grid pallet_grid;
-        public PalletPopover (ColorPalette pallet, bool dark, bool fg) {
+        private Gtk.Grid pallet_grid = null;
+        public PalletPopover (ref ColorPalette pallet, bool dark, bool fg) {
+            build_grid (ref pallet, dark, fg);
+            add (pallet_grid);
+        }
+
+        public void update_pallet (ref ColorPalette pallet, bool dark, bool fg) {
+            remove (pallet_grid);
+            pallet_grid = null;
+            build_grid (ref pallet, dark, fg);
+            add (pallet_grid);
+        }
+
+        private void build_grid (ref ColorPalette pallet, bool dark, bool fg) {
             pallet_grid = new Gtk.Grid ();
             pallet_grid.margin = 6;
             pallet_grid.row_spacing = 6;
@@ -137,6 +149,7 @@ namespace ThiefMD {
                     def_color = pallet.background_light;
                 }
             }
+
             ThiefColorButton default_btn = new ThiefColorButton (def_color);
             default_btn.clicked.connect (() => {
                 value = -1;
@@ -159,7 +172,7 @@ namespace ThiefMD {
                     pallet_grid.attach (pallet_color, offset, 0);
                 }
             } else {
-                foreach (var color in pallet.colors_dark) {
+                foreach (var color in pallet.colors_light) {
                     ThiefColorButton pallet_color = new ThiefColorButton (color);
                     int val = offset;
                     pallet_color.clicked.connect (() => {
@@ -173,7 +186,6 @@ namespace ThiefMD {
             }
 
             pallet_grid.show_all ();
-            add (pallet_grid);
         }
     }
 }

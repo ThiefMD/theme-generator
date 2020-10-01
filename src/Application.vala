@@ -410,8 +410,9 @@ namespace ThiefMD {
             ThiefColorButton fg_button = new ThiefColorButton (fg_color);
             fg_button.set_tooltip_text (_("Foreground Color"));
             fg_button.clicked.connect (() => {
-                PalletPopover popover = new PalletPopover (demo.pallet, dark, true);
+                PalletPopover popover = new PalletPopover (ref demo.pallet, dark, true);
                 popover.set_relative_to (fg_button);
+                popover.update_pallet (ref demo.pallet, dark, true);
                 popover.popup ();
                 popover.clicked.connect (() => {
                     item.fg = popover.value;
@@ -423,8 +424,9 @@ namespace ThiefMD {
             ThiefColorButton bg_button = new ThiefColorButton (bg_color);
             bg_button.set_tooltip_text (_("Background Color"));
             bg_button.clicked.connect (() => {
-                PalletPopover popover = new PalletPopover (demo.pallet, dark, false);
+                PalletPopover popover = new PalletPopover (ref demo.pallet, dark, false);
                 popover.set_relative_to (bg_button);
+                popover.update_pallet (ref demo.pallet, dark, false);
                 popover.popup ();
                 popover.clicked.connect (() => {
                     item.bg = popover.value;
