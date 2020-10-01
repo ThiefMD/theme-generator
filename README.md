@@ -37,6 +37,8 @@ libarchive-devel
 
 ### Building with flatpak
 
+meson subprojects update will clone [gxml](https://gitlab.gnome.org/GNOME/gxml).
+
 ```bash
 $ git clone https://github.com/ThiefMD/theme-generator.git
 $ cd theme-generator
