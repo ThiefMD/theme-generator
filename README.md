@@ -50,7 +50,7 @@ $ flatpak run io.github.thiefmd.themegenerator
 
 As part of the build, [gxml](https://gitlab.gnome.org/GNOME/gxml) will be cloned and built.
 
-```
+```bash
 $ meson build && cd build
 $ meson configure -Dprefix=/usr
 $ ninja
