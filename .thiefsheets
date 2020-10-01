@@ -1,0 +1,21 @@
+{
+  "sheet-order" : [
+    "README.md"
+  ],
+  "hidden-folders" : [
+    "build",
+    "src",
+    "vapi",
+    "meson",
+    "data",
+    "subprojects"
+  ],
+  "folder-order" : [
+    "build",
+    "src",
+    "vapi",
+    "meson",
+    "data",
+    "subprojects"
+  ]
+}
