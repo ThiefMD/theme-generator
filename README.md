@@ -1,2 +1,3 @@
-# theme-generator
-Generate Ulysses themes or GtkSourceView Schemes
+# Theme Generator
+
+Generate Ulysses themes or GtkSourceView Schemes.

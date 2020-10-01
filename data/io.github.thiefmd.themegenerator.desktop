@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ThemeGenerator
+GenericName=Markdown Style Generator
+Comment=Generate Markdown Styles with Style
+Categories=Utility
+Exec=io.github.thiefmd.themegenerator
+Icon=io.github.thiefmd.themegenerator
+Terminal=false
+Type=Application
+Keywords=markdown;style;editor;

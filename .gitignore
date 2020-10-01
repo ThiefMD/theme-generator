@@ -1,0 +1,10 @@
+build/
+.vscode
+docs/_site
+.buildconfig
+subprojects/gxml
+subprojects/gxml/*
+subprojects/ultheme
+subprojects/ultheme/*
+flatpak/.flatpak-builder/*
+flatpak/build*

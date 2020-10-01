@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2018 Miles Wallio <mwallio@gmail.com> -->
+<component type="desktop">
+  <id>io.github.thiefmd.themegenerator.desktop</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <name>ThemeGenerator</name>
+  <launchable type="desktop-id">io.github.thiefmd.themegenerator.desktop</launchable>
+  <summary>Generate Markdown Styles with Style.</summary>
+  <description>
+    <p>Need to generate a Ultheme or GtkSourceView Scheme for Markdown? Look no further.</p>
+  </description>
+  <developer_name>kmwallio</developer_name>
+  <url type="homepage">https://github.com/ThiefMD/theme-generator</url>
+  <url type="bugtracker">https://github.com/ThiefMD/theme-generator/issues</url>
+  <content_rating type="oars-1.1">
+    <content_attribute id="language-humor">mild</content_attribute>
+  </content_rating>
+  <categories>
+    <category>Utility</category>
+  </categories>
+  <keywords>
+    <keyword>markdown</keyword>
+    <keyword>editor</keyword>
+    <keyword>writing</keyword>
+  </keywords>
+  <releases>
+    <release version="0.0.1" date="2020-10-20" urgency="low">
+      <description>
+        <p>Inital release.</p>
+      </description>
+      <url>https://github.com/ThiefMD/theme-generator</url>
+    </release>
+  </releases>
+</component>
