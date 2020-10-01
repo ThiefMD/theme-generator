@@ -35,6 +35,17 @@ gtksourceview3-devel
 libarchive-devel
 ```
 
+### Building with flatpak
+
+```bash
+$ git clone https://github.com/ThiefMD/theme-generator.git
+$ cd theme-generator
+$ meson subprojects update
+$ cd flatpak
+$ flatpak-builder --force-clean --user --install build-dir io.github.thiefmd.themegenerator.json
+$ flatpak run io.github.thiefmd.themegenerator
+```
+
 ### Building
 
 As part of the build, [gxml](https://gitlab.gnome.org/GNOME/gxml) will be cloned and built.
