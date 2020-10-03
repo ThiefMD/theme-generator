@@ -181,7 +181,7 @@ namespace ThiefMD {
                         if (dark_target.query_exists ()) {
                             dark_target.delete ();
                         }
-                        demo.build_lightscheme (dark_target.get_path (), theme_name, theme_author);
+                        demo.build_darkscheme (dark_target.get_path (), theme_name, theme_author);
                     } catch (Error e) {
                         warning ("Could not save file: %s", e.message);
                     }
