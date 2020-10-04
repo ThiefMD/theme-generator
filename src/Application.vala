@@ -146,7 +146,7 @@ namespace ThiefMD {
 
             save_light.clicked.connect (() => {
                 string theme_name = theme.get_text ().chomp ().chug ();
-                string theme_author = theme.get_text ().chomp ().chug ();
+                string theme_author = author.get_text ().chomp ().chug ();
                 if (theme_name == "") {
                     theme_name = "SuperAwesomeTheme";
                 }
@@ -168,7 +168,7 @@ namespace ThiefMD {
 
             save_dark.clicked.connect (() => {
                 string theme_name = theme.get_text ().chomp ().chug ();
-                string theme_author = theme.get_text ().chomp ().chug ();
+                string theme_author = author.get_text ().chomp ().chug ();
                 if (theme_name == "") {
                     theme_name = "SuperAwesomeTheme";
                 }
@@ -190,7 +190,7 @@ namespace ThiefMD {
 
             save_ultheme.clicked.connect (() => {
                 string theme_name = theme.get_text ().chomp ().chug ();
-                string theme_author = theme.get_text ().chomp ().chug ();
+                string theme_author = author.get_text ().chomp ().chug ();
                 if (theme_name == "") {
                     theme_name = "SuperAwesomeTheme";
                 }
