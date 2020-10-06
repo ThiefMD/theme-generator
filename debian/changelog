@@ -1,4 +1,11 @@
-io.github.thiefmd.themegenerator (0.0.1) xenial; urgency=low
+io.github.thiefmd.themegenerator (0.0.2) focal; urgency=low
+
+  * Initial published release
+  * Fix author name being set to theme name
+
+ -- kmwallio <mwallio@gmail.com>  Mon, 05 Oct 2020 22:59:26 -0700
+
+io.github.thiefmd.themegenerator (0.0.1) focal; urgency=low
 
   * Initial release.
 

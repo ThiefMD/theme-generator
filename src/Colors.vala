@@ -146,187 +146,185 @@ namespace ThiefMD {
 
         public void build_ultheme (string dest, string name, string author) {
             try {
-                GXml.DomDocument res = new GXml.Document ();
+                Xml.Doc* res = new Xml.Doc ("1.0");
+                Xml.Ns* ns = new Xml.Ns (null, "", null);
                 // Create scheme
                 // print ("Creating root\n");
-                GXml.DomElement root = res.create_element ("theme");
-                root.set_attribute ("version", "4");
-                root.set_attribute ("displayName", name);
-                root.set_attribute ("author", author);
-                res.append_child (root);
+                Xml.Node* root = new Xml.Node (ns, "theme");
+                root->new_prop ("version", "4");
+                root->new_prop ("displayName", name);
+                root->new_prop ("author", author);
+                res->set_root_element (root);
 
                 // Build light color pallet
-                GXml.DomElement light_pal = res.create_element ("palette");
-                light_pal.set_attribute ("version", "2");
-                light_pal.set_attribute ("mode", "light");
+                Xml.Node* light_pal = new Xml.Node (ns, "palette");
+                light_pal->new_prop ("version", "2");
+                light_pal->new_prop ("mode", "light");
 
-                GXml.DomElement light_fg = res.create_element ("color");
-                light_fg.set_attribute ("identifier", "foreground");
-                light_fg.set_attribute ("value", pallet.foreground_light.substring (1) + "ff");
-                light_pal.append_child (light_fg);
+                Xml.Node* light_fg = new Xml.Node (ns, "color");
+                light_fg->new_prop ("identifier", "foreground");
+                light_fg->new_prop ("value", pallet.foreground_light.substring (1) + "ff");
+                light_pal->add_child (light_fg);
 
-                GXml.DomElement light_bg = res.create_element ("color");
-                light_bg.set_attribute ("identifier", "background");
-                light_bg.set_attribute ("value", pallet.background_light.substring (1) + "ff");
-                light_pal.append_child (light_bg);
+                Xml.Node* light_bg = new Xml.Node (ns, "color");
+                light_bg->new_prop ("identifier", "background");
+                light_bg->new_prop ("value", pallet.background_light.substring (1) + "ff");
+                light_pal->add_child (light_bg);
 
                 foreach (var color in pallet.colors_light) {
-                    GXml.DomElement light_elem = res.create_element ("color");
-                    light_elem.set_attribute ("value", color.substring (1) + "ff");
-                    light_pal.append_child (light_elem);
+                    Xml.Node* light_elem = new Xml.Node (ns, "color");
+                    light_elem->new_prop ("value", color.substring (1) + "ff");
+                    light_pal->add_child (light_elem);
                 }
 
-                root.append_child (light_pal);
+                root->add_child (light_pal);
 
                 // Build dark color pallet
-                GXml.DomElement dark_pal = res.create_element ("palette");
-                dark_pal.set_attribute ("version", "2");
-                dark_pal.set_attribute ("mode", "dark");
+                Xml.Node* dark_pal = new Xml.Node (ns, "palette");
+                dark_pal->new_prop ("version", "2");
+                dark_pal->new_prop ("mode", "dark");
 
-                GXml.DomElement dark_fg = res.create_element ("color");
-                dark_fg.set_attribute ("identifier", "foreground");
-                dark_fg.set_attribute ("value", pallet.foreground_dark.substring (1) + "ff");
-                dark_pal.append_child (dark_fg);
+                Xml.Node* dark_fg = new Xml.Node (ns, "color");
+                dark_fg->new_prop ("identifier", "foreground");
+                dark_fg->new_prop ("value", pallet.foreground_dark.substring (1) + "ff");
+                dark_pal->add_child (dark_fg);
 
-                GXml.DomElement dark_bg = res.create_element ("color");
-                dark_bg.set_attribute ("identifier", "background");
-                dark_bg.set_attribute ("value", pallet.background_dark.substring (1) + "ff");
-                dark_pal.append_child (dark_bg);
+                Xml.Node* dark_bg = new Xml.Node (ns, "color");
+                dark_bg->new_prop ("identifier", "background");
+                dark_bg->new_prop ("value", pallet.background_dark.substring (1) + "ff");
+                dark_pal->add_child (dark_bg);
 
                 foreach (var color in pallet.colors_dark) {
-                    GXml.DomElement dark_elem = res.create_element ("color");
-                    dark_elem.set_attribute ("value", color.substring (1) + "ff");
-                    dark_pal.append_child (dark_elem);
+                    Xml.Node* dark_elem = new Xml.Node (ns, "color");
+                    dark_elem->new_prop ("value", color.substring (1) + "ff");
+                    dark_pal->add_child (dark_elem);
                 }
 
-                root.append_child (dark_pal);
+                root->add_child (dark_pal);
 
                 // Headings
                 foreach (var target in _ulysses_style_map.get ("heading").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.headings));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.headings));
-                    item_def.set_attribute ("traits", get_traits (light.headings));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.headings));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.headings));
+                    item_def->new_prop ("traits", get_traits (light.headings));
+                    root->add_child (item_def);
                 }
 
                 // Codeblock
                 foreach (var target in _ulysses_style_map.get ("codeblock").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.codeblock));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.codeblock));
-                    item_def.set_attribute ("traits", get_traits (light.codeblock));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.codeblock));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.codeblock));
+                    item_def->new_prop ("traits", get_traits (light.codeblock));
+                    root->add_child (item_def);
                 }
 
                 // Codeblock
                 foreach (var target in _ulysses_style_map.get ("code").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.code));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.code));
-                    item_def.set_attribute ("traits", get_traits (light.code));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.code));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.code));
+                    item_def->new_prop ("traits", get_traits (light.code));
+                    root->add_child (item_def);
                 }
 
                 // comment
                 foreach (var target in _ulysses_style_map.get ("comment").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.comment));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.comment));
-                    item_def.set_attribute ("traits", get_traits (light.comment));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.comment));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.comment));
+                    item_def->new_prop ("traits", get_traits (light.comment));
+                    root->add_child (item_def);
                 }
 
                 // blockquote
                 foreach (var target in _ulysses_style_map.get ("blockquote").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.blockquote));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.blockquote));
-                    item_def.set_attribute ("traits", get_traits (light.blockquote));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.blockquote));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.blockquote));
+                    item_def->new_prop ("traits", get_traits (light.blockquote));
+                    root->add_child (item_def);
                 }
 
                 // link
                 foreach (var target in _ulysses_style_map.get ("link").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.link));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.link));
-                    item_def.set_attribute ("traits", get_traits (light.link));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.link));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.link));
+                    item_def->new_prop ("traits", get_traits (light.link));
+                    root->add_child (item_def);
                 }
 
                 // link
                 foreach (var target in _ulysses_style_map.get ("divider").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.divider));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.divider));
-                    item_def.set_attribute ("traits", get_traits (light.divider));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.divider));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.divider));
+                    item_def->new_prop ("traits", get_traits (light.divider));
+                    root->add_child (item_def);
                 }
 
                 // link
                 foreach (var target in _ulysses_style_map.get ("orderedList").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.orderedList));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.orderedList));
-                    item_def.set_attribute ("traits", get_traits (light.orderedList));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.orderedList));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.orderedList));
+                    item_def->new_prop ("traits", get_traits (light.orderedList));
+                    root->add_child (item_def);
                 }
 
                 // image
                 foreach (var target in _ulysses_style_map.get ("image").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.image));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.image));
-                    item_def.set_attribute ("traits", get_traits (light.image));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.image));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.image));
+                    item_def->new_prop ("traits", get_traits (light.image));
+                    root->add_child (item_def);
                 }
 
                 // emph
                 foreach (var target in _ulysses_style_map.get ("emph").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.emph));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.emph));
-                    item_def.set_attribute ("traits", get_traits (light.emph));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.emph));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.emph));
+                    item_def->new_prop ("traits", get_traits (light.emph));
+                    root->add_child (item_def);
                 }
 
                 // strong
                 foreach (var target in _ulysses_style_map.get ("strong").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.strong));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.strong));
-                    item_def.set_attribute ("traits", get_traits (light.strong));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.strong));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.strong));
+                    item_def->new_prop ("traits", get_traits (light.strong));
+                    root->add_child (item_def);
                 }
 
                 // strong
                 foreach (var target in _ulysses_style_map.get ("strike").targets) {
-                    GXml.DomElement item_def = res.create_element ("item");
-                    item_def.set_attribute ("definition", target);
-                    item_def.set_attribute ("colorsLight", get_color_string (light.strike));
-                    item_def.set_attribute ("colorsDark", get_color_string (dark.strike));
-                    item_def.set_attribute ("traits", get_traits (light.strike));
-                    root.append_child (item_def);
+                    Xml.Node* item_def = new Xml.Node (ns, "item");
+                    item_def->new_prop ("definition", target);
+                    item_def->new_prop ("colorsLight", get_color_string (light.strike));
+                    item_def->new_prop ("colorsDark", get_color_string (dark.strike));
+                    item_def->new_prop ("traits", get_traits (light.strike));
+                    root->add_child (item_def);
                 }
 
-                string scheme = ((GXml.Document) res).write_string ();
-                scheme = scheme.replace ("<?xml version=\"1.0\"?>\n", "");
-                scheme = scheme.replace ("><", ">\n  <");
-                scheme = scheme.replace ("displayname", "displayName");
-                scheme = scheme.replace ("colorslight", "colorsLight");
-                scheme = scheme.replace ("colorsdark", "colorsDark");
+                string scheme;
+                res->dump_memory_enc_format (out scheme);
+                scheme = scheme.substring (scheme.index_of ("\n") + 1);
                 File save = File.new_for_path (dest);
                 if (save.query_exists()) {
                     save.delete ();
@@ -379,12 +377,11 @@ namespace ThiefMD {
 
         public void build_lightscheme (string dest, string name, string author) {
             try {
-                string scheme = build_style (light, pallet, false, name, author);
                 File save = File.new_for_path (dest);
                 if (save.query_exists()) {
                     save.delete ();
                 }
-                save_file (save, scheme.data);
+                build_style (dest, light, pallet, false, name, author);
             } catch (Error e) {
                 warning ("Could not generate theme: %s", e.message);
             }
@@ -392,219 +389,208 @@ namespace ThiefMD {
 
         public void build_darkscheme (string dest, string name, string author) {
             try {
-                string scheme = build_style (dark, pallet, true, name, author);
                 File save = File.new_for_path (dest);
                 if (save.query_exists()) {
                     save.delete ();
                 }
-                save_file (save, scheme.data);
+                build_style (dest, dark, pallet, true, name, author);
             } catch (Error e) {
                 warning ("Could not generate theme: %s", e.message);
             }
         }
 
-        private string build_style (ColorMap colors, ColorPalette pallet, bool dark, string name, string author) throws Error {
-            GXml.DomDocument res = new GXml.Document ();
+        private void build_style (string dest, ColorMap colors, ColorPalette pallet, bool dark, string name, string author) throws Error {
+            Xml.Doc* res = new Xml.Doc ("1.0");
 
             // Create scheme
+            Xml.Ns* ns = new Xml.Ns (null, "", null);
             // print ("Creating root\n");
-            GXml.DomElement root = res.create_element ("style-scheme");
-            root.set_attribute ("id", name.down () + "-" + ((dark) ? "dark" : "light"));
-            root.set_attribute ("name", name.down () + "-" + ((dark) ? "dark" : "light"));
-            root.set_attribute ("version", "1.0");
-            res.append_child (root);
+            Xml.Node* root = new Xml.Node (ns, "style-scheme");
+            root->new_prop ("id", name.down () + "-" + ((dark) ? "dark" : "light"));
+            root->new_prop ("name", name.down () + "-" + ((dark) ? "dark" : "light"));
+            root->new_prop ("version", "1.0");
+            res->set_root_element (root);
 
             // Add frontmatter
             // print ("Adding frontmatter\n");
-            GXml.DomElement author_elem = res.create_element ("author");
-            GXml.DomText author_text = res.create_text_node (author);
-            author_elem.append_child (author_text);
-            root.append_child (author_elem);
-
-            GXml.DomElement description = res.create_element ("description");
-            GXml.DomText description_text = res.create_text_node (
-                "Style Scheme generated with poor decisions"
-            );
-            description.append_child (description_text);
-            root.append_child (description);
+            root->new_text_child (ns, "author", author);
+            root->new_text_child (ns, "description", "Style Scheme generated with poor decisions");
 
             // Set default colors
-            GXml.DomElement text = res.create_element ("style");
-            text.set_attribute ("name", "text");
+            Xml.Node* text = new Xml.Node (ns, "style");
+            text->new_prop ("name", "text");
             if (dark) {
-                text.set_attribute ("foreground", pallet.foreground_dark);
-                text.set_attribute ("background", pallet.background_dark);
+                text->new_prop ("foreground", pallet.foreground_dark);
+                text->new_prop ("background", pallet.background_dark);
             } else {
-                text.set_attribute ("foreground", pallet.foreground_light);
-                text.set_attribute ("background", pallet.background_light);
+                text->new_prop ("foreground", pallet.foreground_light);
+                text->new_prop ("background", pallet.background_light);
             }
-            root.append_child (text);
+            root->add_child (text);
 
             // Come up with additional stylings not in file
-            GXml.DomElement selection = res.create_element ("style");
-            selection.set_attribute ("name", "selection");
+            Xml.Node* selection = new Xml.Node (ns, "style");
+            selection->new_prop ("name", "selection");
             if (dark) {
-                selection.set_attribute ("foreground", darken (pallet.foreground_dark, 1));
-                selection.set_attribute ("background", lighten (pallet.background_dark, 2));
+                selection->new_prop ("foreground", darken (pallet.foreground_dark, 1));
+                selection->new_prop ("background", lighten (pallet.background_dark, 2));
             } else {
-                selection.set_attribute ("foreground", darken (pallet.foreground_light, 2));
-                selection.set_attribute ("background", lighten (pallet.background_light, 1));
+                selection->new_prop ("foreground", darken (pallet.foreground_light, 2));
+                selection->new_prop ("background", lighten (pallet.background_light, 1));
             }
-            root.append_child (selection);
+            root->add_child (selection);
 
-            GXml.DomElement current_line = res.create_element ("style");
-            current_line.set_attribute ("name", "current-line");
+            Xml.Node* current_line = new Xml.Node (ns, "style");
+            current_line->new_prop ("name", "current-line");
             if (dark) {
-                current_line.set_attribute ("background", lighten (pallet.background_dark, 1));
+                current_line->new_prop ("background", lighten (pallet.background_dark, 1));
             } else {
-                selection.set_attribute ("foreground", darken (pallet.foreground_light, 1));
+                current_line->new_prop ("foreground", darken (pallet.foreground_light, 1));
             }
-            root.append_child (current_line);
+            root->add_child (current_line);
 
-            GXml.DomElement cursor = res.create_element ("style");
-            cursor.set_attribute ("name", "cursor");
+            Xml.Node* cursor = new Xml.Node (ns, "style");
+            cursor->new_prop ("name", "cursor");
             if (dark) {
-                cursor.set_attribute ("foreground", (colors.headings.fg >= 0 && colors.headings.fg <= 10) ? pallet.colors_dark[ colors.headings.fg] : pallet.foreground_dark);
+                cursor->new_prop ("foreground", (colors.headings.fg >= 0 && colors.headings.fg <= 10) ? pallet.colors_dark[ colors.headings.fg] : pallet.foreground_dark);
             } else {
-                cursor.set_attribute ("foreground", (colors.headings.fg >= 0 && colors.headings.fg <= 10) ? pallet.colors_light[ colors.headings.fg] : pallet.foreground_light);
+                cursor->new_prop ("foreground", (colors.headings.fg >= 0 && colors.headings.fg <= 10) ? pallet.colors_light[ colors.headings.fg] : pallet.foreground_light);
             }
-            root.append_child (cursor);
+            root->add_child (cursor);
 
             // heading
             foreach (var apply in _gtk_style_map.get ("heading").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.headings, pallet, dark, ref style);
-                style.set_attribute ("scale", "large");
-                root.append_child (style);
+                style->new_prop ("scale", "large");
+                root->add_child (style);
             }
 
             // Code block
             foreach (var apply in _gtk_style_map.get ("codeblock").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.codeblock, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Code
             foreach (var apply in _gtk_style_map.get ("code").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.code, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Comment
             foreach (var apply in _gtk_style_map.get ("comment").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.comment, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Blockquote
             foreach (var apply in _gtk_style_map.get ("blockquote").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.blockquote, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Link
             foreach (var apply in _gtk_style_map.get ("link").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.link, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Divider
             foreach (var apply in _gtk_style_map.get ("divider").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.divider, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // List
             foreach (var apply in _gtk_style_map.get ("orderedList").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.orderedList, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Image
             foreach (var apply in _gtk_style_map.get ("image").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.image, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Emphasis
             foreach (var apply in _gtk_style_map.get ("emph").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.emph, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Strong
             foreach (var apply in _gtk_style_map.get ("strong").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.strong, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
             // Strong
             foreach (var apply in _gtk_style_map.get ("strike").targets) {
-                GXml.DomElement style = res.create_element ("style");
-                style.set_attribute ("name", apply);
+                Xml.Node* style = new Xml.Node (ns, "style");
+                style->new_prop ("name", apply);
                 add_attributes (colors.strike, pallet, dark, ref style);
-                root.append_child (style);
+                root->add_child (style);
             }
 
-            return ((GXml.Document) res).write_string ();
+            res->save_format_file_enc (dest);
+
+            delete res;
         }
 
-        public void add_attributes (ColorMapItem item, ColorPalette pallet, bool is_dark, ref GXml.DomElement elem) {
-            try {
-                string fg;
-                string bg;
+        public void add_attributes (ColorMapItem item, ColorPalette pallet, bool is_dark, ref Xml.Node* elem) {
+            string fg;
+            string bg;
 
-                if (is_dark) {
-                    fg = (item.fg >= 0 && item.fg <= 10) ? pallet.colors_dark[item.fg] : pallet.foreground_dark;
-                    bg = (item.bg >= 0 && item.bg <= 10) ? pallet.colors_dark[item.bg] : pallet.background_dark;
-                } else {
-                    fg = (item.fg >= 0 && item.fg <= 10) ? pallet.colors_light[item.fg] : pallet.foreground_light;
-                    bg = (item.bg >= 0 && item.bg <= 10) ? pallet.colors_light[item.bg] : pallet.background_light;
-                }
-
-                if (item.bold) {
-                    elem.set_attribute ("bold", "true");
-                }
-
-                if (item.italic) {
-                    elem.set_attribute ("italic", "true");
-                }
-
-                if (item.underline) {
-                    elem.set_attribute ("underline", "true");
-                    elem.set_attribute ("underline-color", fg);
-                }
-
-                if (item.strikethrough) {
-                    elem.set_attribute ("strikethrough", "true");
-                }
-
-                elem.set_attribute ("background", bg);
-                elem.set_attribute ("foreground", fg);
-            } catch (Error e) {
-                warning ("Could not add attributes: %s", e.message);
+            if (is_dark) {
+                fg = (item.fg >= 0 && item.fg <= 10) ? pallet.colors_dark[item.fg] : pallet.foreground_dark;
+                bg = (item.bg >= 0 && item.bg <= 10) ? pallet.colors_dark[item.bg] : pallet.background_dark;
+            } else {
+                fg = (item.fg >= 0 && item.fg <= 10) ? pallet.colors_light[item.fg] : pallet.foreground_light;
+                bg = (item.bg >= 0 && item.bg <= 10) ? pallet.colors_light[item.bg] : pallet.background_light;
             }
+
+            if (item.bold) {
+                elem->new_prop ("bold", "true");
+            }
+
+            if (item.italic) {
+                elem->new_prop ("italic", "true");
+            }
+
+            if (item.underline) {
+                elem->new_prop ("underline", "true");
+                elem->new_prop ("underline-color", fg);
+            }
+
+            if (item.strikethrough) {
+                elem->new_prop ("strikethrough", "true");
+            }
+
+            elem->new_prop ("background", bg);
+            elem->new_prop ("foreground", fg);
         }
 
         public string darken (string color, int how_much = 1) {

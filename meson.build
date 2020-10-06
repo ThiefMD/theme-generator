@@ -1,6 +1,6 @@
 # Name our project
 project('io.github.thiefmd.themegenerator', ['vala', 'c'],
-    version: '0.0.2'
+    version: '0.0.3'
 )
 
 # Application ID
@@ -37,7 +37,6 @@ cc = meson.get_compiler('c')
 
 # Let's define our executable
 add_project_arguments(['--vapidir', join_paths(meson.current_source_dir(), 'vapi')], language: 'vala')
-gxml_dep = dependency('gxml-0.18', fallback : [ 'gxml', 'libgxml_dep' ])
 
 executable(
     meson.project_name(),
@@ -53,7 +52,7 @@ executable(
         dependency('clutter-1.0'),
         dependency('gee-0.8'),
         dependency('libarchive'),
-        gxml_dep
+        dependency('libxml-2.0')
     ],
     vala_args: [
         meson.source_root() + '/vapi/config.vapi'

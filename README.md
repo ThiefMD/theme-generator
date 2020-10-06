@@ -33,24 +33,20 @@ clutter-gtk-devel
 gtk3-devel
 gtksourceview3-devel
 libarchive-devel
+libxml2-devel
+libgee-devel
 ```
 
 ### Building with flatpak
 
-meson subprojects update will clone [gxml](https://gitlab.gnome.org/GNOME/gxml).
-
 ```bash
 $ git clone https://github.com/ThiefMD/theme-generator.git
-$ cd theme-generator
-$ meson subprojects update
-$ cd flatpak
+$ cd theme-generator/flatpak
 $ flatpak-builder --force-clean --user --install build-dir io.github.thiefmd.themegenerator.json
 $ flatpak run io.github.thiefmd.themegenerator
 ```
 
 ### Building
-
-As part of the build, [gxml](https://gitlab.gnome.org/GNOME/gxml) will be cloned and built.
 
 ```bash
 $ meson build && cd build
