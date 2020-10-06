@@ -324,6 +324,7 @@ namespace ThiefMD {
 
                 string scheme;
                 res->dump_memory_enc_format (out scheme);
+                delete res;
                 scheme = scheme.substring (scheme.index_of ("\n") + 1);
                 File save = File.new_for_path (dest);
                 if (save.query_exists()) {
