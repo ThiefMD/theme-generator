@@ -20,6 +20,6 @@ Homepage: https://thiefmd.com
 
 Package: io.github.thiefmd.themegenerator
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, pandoc
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Markdown Style Generator for GtkSourceView editors
   and Ulysses Styles.
