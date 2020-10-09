@@ -8,7 +8,9 @@
     "vapi",
     "meson",
     "data",
-    "subprojects"
+    "subprojects",
+    "flatpak",
+    "debian"
   ],
   "folder-order" : [
     "build",
@@ -16,6 +18,8 @@
     "vapi",
     "meson",
     "data",
-    "subprojects"
+    "subprojects",
+    "debian",
+    "flatpak"
   ]
 }

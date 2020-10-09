@@ -6,6 +6,16 @@ Interested in Styling Markdown in [GtkSourceView](https://wiki.gnome.org/Project
 
 Generate Light and Dark Themes that can be exported to [GtkSourceView Style Schemes](https://wiki.gnome.org/Projects/GtkSourceView/StyleSchemes) or a single light and dark theme that can be used with Ulysses or ThiefMD.
 
+## Installation
+
+Builds can be found on [our PPA](https://launchpad.net/~thiefmd/+archive/ubuntu/thiefmd).
+
+```bash
+sudo add-apt-repository ppa:thiefmd/thiefmd
+sudo apt-get update
+sudo apt-get install com.github.kmwallio.thiefmd
+```
+
 ## Requirements
 
 ### Ubuntu
