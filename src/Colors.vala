@@ -453,9 +453,13 @@ namespace ThiefMD {
             Xml.Node* cursor = new Xml.Node (ns, "style");
             cursor->new_prop ("name", "cursor");
             if (dark) {
-                cursor->new_prop ("foreground", (colors.headings.fg >= 0 && colors.headings.fg <= 10) ? pallet.colors_dark[ colors.headings.fg] : pallet.foreground_dark);
+                if (colors.headings.fg >= 0 && colors.headings.fg <= 10) {
+                    cursor->new_prop ("foreground", pallet.colors_dark[colors.headings.fg]);
+                }
             } else {
-                cursor->new_prop ("foreground", (colors.headings.fg >= 0 && colors.headings.fg <= 10) ? pallet.colors_light[ colors.headings.fg] : pallet.foreground_light);
+                if (colors.headings.fg >= 0 && colors.headings.fg <= 10) {
+                    cursor->new_prop ("foreground", pallet.colors_light[colors.headings.fg]);
+                }
             }
             root->add_child (cursor);
 
@@ -590,8 +594,13 @@ namespace ThiefMD {
                 elem->new_prop ("strikethrough", "true");
             }
 
-            elem->new_prop ("background", bg);
-            elem->new_prop ("foreground", fg);
+            if (item.bg >= 0 && item.bg <= 10) {
+                elem->new_prop ("background", bg);
+            }
+
+            if (item.fg >= 0 && item.fg <= 10) {
+                elem->new_prop ("foreground", fg);
+            }
         }
 
         public string darken (string color, int how_much = 1) {

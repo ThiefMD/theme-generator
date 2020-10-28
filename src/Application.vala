@@ -59,7 +59,16 @@ namespace ThiefMD {
             window.set_titlebar(bar);
             var preview_box = new Gtk.ScrolledWindow (null, null);
 
-            var manager = Gtk.SourceLanguageManager.get_default ();
+            var manager = new Gtk.SourceLanguageManager ();
+            string custom_languages = Path.build_path (
+                Path.DIR_SEPARATOR_S,
+                Build.PKGDATADIR,
+                "gtksourceview-4",
+                "language-specs");
+            string[] language_paths = {
+                custom_languages
+            };
+            manager.set_search_path (language_paths);
             var language = manager.guess_language (null, "text/markdown");
 
             view_dark = new Gtk.SourceView ();

@@ -19,7 +19,12 @@ namespace ThiefMD {
             written += output.write (buffer[written:buffer.length]);
     }
 
-    public const string IPSUM = """# This is a Preview File
+    public const string IPSUM = """---
+title: This is Sample YAML
+tags: filler, sample, example
+---
+
+# This is a Preview File
 
 It will be used for sanity checking the style-sheet used.
 

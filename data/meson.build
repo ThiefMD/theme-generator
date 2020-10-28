@@ -16,3 +16,8 @@ install_data(
     meson.project_name() + '.appdata.xml',
     install_dir: join_paths(get_option('datadir'), 'metainfo')
 )
+
+install_subdir(
+    join_paths('language-specs'),
+    install_dir: join_paths(get_option('prefix'), get_option('datadir'), 'io.github.thiefmd.themegenerator', 'gtksourceview-4')
+)
