@@ -1,3 +1,9 @@
+io.github.thiefmd.themegenerator (0.0.5) focal; urgency=low
+
+  * Match ThiefMD look in editor
+
+ -- kmwallio <mwallio@gmail.com>  Sat, 27 Mar 2021 21:39:14 -0700
+
 io.github.thiefmd.themegenerator (0.0.4) focal; urgency=medium
 
   * YAML Frontmatter Support
