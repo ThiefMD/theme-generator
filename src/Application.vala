@@ -1,4 +1,5 @@
 using Gdk;
+using ThiefMD.Enrichments;
 
 namespace ThiefMD {
     public class ThemeGenerator : Gtk.Application {
@@ -15,6 +16,8 @@ namespace ThiefMD {
         private Gtk.HeaderBar bar;
         private Gtk.Stack stack;
         public signal void state_change ();
+        MarkdownEnrichment light_enrich;
+        MarkdownEnrichment dark_enrich;
 
         public ThemeGenerator () {
             Object (
@@ -78,6 +81,12 @@ namespace ThiefMD {
             view_dark.set_buffer (buffer_dark);
             view_dark.set_wrap_mode (Gtk.WrapMode.WORD);
             buffer_dark.text = IPSUM;
+            dark_enrich = new MarkdownEnrichment ();
+            dark_enrich.attach (view_dark);
+            dark_enrich.recheck_all ();
+            buffer_dark.changed.connect (() => {
+                dark_enrich.recheck_all ();
+            });
 
             view_light = new Gtk.SourceView ();
             view_light.margin = 0;
@@ -86,6 +95,12 @@ namespace ThiefMD {
             view_light.set_buffer (buffer_light);
             view_light.set_wrap_mode (Gtk.WrapMode.WORD);
             buffer_light.text = IPSUM;
+            light_enrich = new MarkdownEnrichment ();
+            light_enrich.attach (view_light);
+            light_enrich.recheck_all ();
+            buffer_light.changed.connect (() => {
+                light_enrich.recheck_all ();
+            });
 
             stack = new Gtk.Stack ();
             stack.add_titled (view_light, _("Light Theme"), _("Light"));
@@ -407,6 +422,12 @@ namespace ThiefMD {
             grid.hexpand = true;
 
             ColorMapItem item = get_item (elem, dark);
+            if (item == demo.dark.codeblock) {
+                dark_enrich.set_code_background ((item.bg >= 0 && item.bg <= 10) ? demo.pallet.colors_dark[item.bg] : demo.pallet.background_dark);
+            }
+            if (item == demo.light.codeblock) {
+                light_enrich.set_code_background ((item.bg >= 0 && item.bg <= 10) ? demo.pallet.colors_light[item.bg] : demo.pallet.background_light);
+            }
 
             string fg_color = "", bg_color = "";
             if (dark){
@@ -448,9 +469,15 @@ namespace ThiefMD {
                 if (dark){
                     bg_color = (item.bg >= 0 && item.bg <= 10) ? demo.pallet.colors_dark[item.bg] : demo.pallet.background_dark;
                     fg_color = (item.fg >= 0 && item.fg <= 10) ? demo.pallet.colors_dark[item.fg] : demo.pallet.foreground_dark;
+                    if (item == demo.dark.codeblock) {
+                        dark_enrich.set_code_background (bg_color);
+                    }
                 } else {
                     bg_color = (item.bg >= 0 && item.bg <= 10) ? demo.pallet.colors_light[item.bg] : demo.pallet.background_light;
                     fg_color = (item.fg >= 0 && item.fg <= 10) ? demo.pallet.colors_light[item.fg] : demo.pallet.foreground_light;
+                    if (item == demo.light.codeblock) {
+                        light_enrich.set_code_background (bg_color);
+                    }
                 }
                 fg_button.set_color_from_string (fg_color);
                 bg_button.set_color_from_string (bg_color);

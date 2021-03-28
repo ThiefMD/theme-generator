@@ -44,6 +44,7 @@ executable(
     'src/Constants.vala',
     'src/Colors.vala',
     'src/UI.vala',
+    'src/Markdown.vala',
     c_args: c_args,
     dependencies: [
         dependency('gobject-2.0'),
