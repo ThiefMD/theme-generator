@@ -13,7 +13,7 @@ Builds can be found on [our PPA](https://launchpad.net/~thiefmd/+archive/ubuntu/
 ```bash
 sudo add-apt-repository ppa:thiefmd/thiefmd
 sudo apt-get update
-sudo apt-get install com.github.kmwallio.thiefmd
+sudo apt-get install io.github.thiefmd.themegenerator
 ```
 
 ## Requirements
