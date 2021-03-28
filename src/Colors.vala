@@ -26,7 +26,7 @@ namespace ThiefMD {
             colors_light[3] = "#dc2f02";
             colors_light[4] = "#e76f51";
             colors_light[5] = "#e63946";
-            colors_light[6] = "#f1faee";
+            colors_light[6] = "#010a0e";
             colors_light[7] = "#a8dadc";
             colors_light[8] = "#457b9d";
             colors_light[9] = "#1d3557";
