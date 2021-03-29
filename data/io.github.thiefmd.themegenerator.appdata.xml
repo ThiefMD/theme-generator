@@ -6,13 +6,15 @@
   <project_license>MIT</project_license>
   <name>ThemeGenerator</name>
   <launchable type="desktop-id">io.github.thiefmd.themegenerator.desktop</launchable>
-  <summary>Generate Markdown Styles with Style.</summary>
+  <summary>Generate Styles with Style.</summary>
   <description>
     <p>Need to generate a Ultheme or GtkSourceView Scheme for Markdown? Look no further.</p>
+    <p>Themes are compatible with ThiefMD, gedit, GNOME Builder, Editors based on GtkSourceView, and Ulysses.</p>
   </description>
   <developer_name>kmwallio</developer_name>
   <url type="homepage">https://github.com/ThiefMD/theme-generator</url>
   <url type="bugtracker">https://github.com/ThiefMD/theme-generator/issues</url>
+  <url type="help">https://themes.thiefmd.com/howto</url>
   <content_rating type="oars-1.1">
     <content_attribute id="language-humor">mild</content_attribute>
   </content_rating>
@@ -21,15 +23,28 @@
   </categories>
   <keywords>
     <keyword>markdown</keyword>
-    <keyword>editor</keyword>
-    <keyword>writing</keyword>
+    <keyword>ulysses</keyword>
+    <keyword>customization</keyword>
+    <keyword>gtksourceview</keyword>
+    <keyword>sourceview</keyword>
+    <keyword>thiefmd</keyword>
   </keywords>
   <releases>
-    <release version="0.0.1" date="2020-10-20" urgency="low">
+    <release version="0.0.6" date="2021-03-29" urgency="low">
       <description>
-        <p>Inital release.</p>
+        <p>Inital public release.</p>
+        <ul>
+          <li>Allow for loading of color palettes</li>
+          <li>Allow export to Ultheme or Gtk.SourceView compatible XML themes</li>
+        </ul>
       </description>
-      <url>https://github.com/ThiefMD/theme-generator</url>
+      <url>https://github.com/ThiefMD/theme-generator/releases/tag/v0.0.6-nowloading</url>
+    </release>
+    <release version="0.0.3" date="2020-10-20" urgency="low">
+      <description>
+        <p>Inital release that saved author's name to file.</p>
+      </description>
+      <url>https://github.com/ThiefMD/theme-generator/releases/tag/v0.0.3-authorable</url>
     </release>
   </releases>
 </component>
