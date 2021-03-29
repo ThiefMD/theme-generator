@@ -3,6 +3,162 @@ using Gee;
 using Clutter;
 
 namespace ThiefMD {
+    public class ColorPaletteLoader : Ultheme.Parser {
+        private int on_dark_index = 0;
+        private int on_light_index = 0;
+        public ColorPaletteLoader (File file) throws Error {
+            base (file);
+        }
+
+        public void copy_to (ref ColorTheme demo) {
+            Ultheme.HexColorPalette light_palette;
+            Ultheme.HexColorPalette dark_palette;
+
+            get_light_theme_palette (out light_palette);
+            get_dark_theme_palette (out dark_palette);
+
+            demo.pallet.foreground_light = light_palette.global.foreground;
+            demo.pallet.background_light = light_palette.global.background;
+
+            demo.pallet.foreground_dark = dark_palette.global.foreground;
+            demo.pallet.background_dark = dark_palette.global.background;
+            for (int i = 0; i <= 11; i++) {
+                set_item (i, ref demo, ref light_palette, ref dark_palette);
+            }
+        }
+
+        private void grab_color (ref ColorMapItem set_item, ref ColorTheme demo, ref Ultheme.HexColorPalette pal, Ultheme.HexColorPair item, bool dark) {
+            bool fg_set = false;
+            bool bg_set = false;
+            if (item.foreground == pal.global.foreground) {
+                set_item.fg = -1;
+                fg_set = true;
+
+            }
+
+            if (item.background == pal.global.background) {
+                set_item.bg = -1;
+                bg_set = true;
+            }
+
+            if (dark) {
+                if (!fg_set) {
+                    int search = -1;
+                    for (int i = 0;  i < on_dark_index; i++) {
+                        if (demo.pallet.colors_dark[i] == item.foreground) {
+                            search = i;
+                        }
+                    }
+                    if (!fg_set && search != -1) {
+                        set_item.fg = search;
+                    } else if (!fg_set) {
+                        set_item.fg = on_dark_index;
+                        demo.pallet.colors_dark[on_dark_index] = item.foreground;
+                        on_dark_index++;
+                    }
+                }
+                if (!bg_set) {
+                    int search = -1;
+                    for (int i = 0;  i < on_dark_index; i++) {
+                        if (demo.pallet.colors_dark[i] == item.background) {
+                            search = i;
+                        }
+                    }
+                    if (!bg_set && search != -1) {
+                        set_item.bg = search;
+                    } else if (!bg_set) {
+                        set_item.bg = on_dark_index;
+                        demo.pallet.colors_dark[on_dark_index] = item.background;
+                        on_dark_index++;
+                    }
+                }
+            } else {
+                if (!fg_set) {
+                    int search = -1;
+                    for (int i = 0;  i < on_light_index; i++) {
+                        if (demo.pallet.colors_light[i] == item.foreground) {
+                            search = i;
+                        }
+                    }
+                    if (!fg_set && search != -1) {
+                        set_item.fg = search;
+                    } else if (!fg_set) {
+                        set_item.fg = on_light_index;
+                        demo.pallet.colors_light[on_light_index] = item.foreground;
+                        on_light_index++;
+                    }
+                }
+                if (!bg_set) {
+                    int search = -1;
+                    for (int i = 0;  i < on_light_index; i++) {
+                        if (demo.pallet.colors_light[i] == item.background) {
+                            search = i;
+                        }
+                    }
+                    if (!bg_set && search != -1) {
+                        set_item.bg = search;
+                    } else if (!bg_set) {
+                        set_item.bg = on_light_index;
+                        demo.pallet.colors_light[on_light_index] = item.background;
+                        on_light_index++;
+                    }
+                }
+            }
+        }
+
+        public void set_item (int index, ref ColorTheme demo, ref Ultheme.HexColorPalette light, ref Ultheme.HexColorPalette dark) {
+            switch (index) {
+                case 0:
+                    grab_color (ref demo.dark.headings, ref demo, ref dark, dark.headers, true);
+                    grab_color (ref demo.light.headings, ref demo, ref light, light.headers, false);
+                    break;
+                case 1:
+                    grab_color (ref demo.dark.codeblock, ref demo, ref dark, dark.code_block, true);
+                    grab_color (ref demo.light.codeblock, ref demo, ref light, light.code_block, false);
+                    break;
+                case 2:
+                    grab_color (ref demo.dark.code, ref demo, ref dark, dark.inline_code, true);
+                    grab_color (ref demo.light.code, ref demo, ref light, light.inline_code, false);
+                    break;
+                case 3:
+                    grab_color (ref demo.dark.comment, ref demo, ref dark, dark.escape_char, true);
+                    grab_color (ref demo.light.comment, ref demo, ref light, light.escape_char, false);
+                    break;
+                case 4:
+                    grab_color (ref demo.dark.blockquote, ref demo, ref dark, dark.blockquote, true);
+                    grab_color (ref demo.light.blockquote, ref demo, ref light, light.blockquote, false);
+                    break;
+                case 5:
+                    grab_color (ref demo.dark.link, ref demo, ref dark, dark.link, true);
+                    grab_color (ref demo.light.link, ref demo, ref light, light.link, false);
+                    break;
+                case 6:
+                    grab_color (ref demo.dark.divider, ref demo, ref dark, dark.divider, true);
+                    grab_color (ref demo.light.divider, ref demo, ref light, light.divider, false);
+                    break;
+                case 7:
+                    grab_color (ref demo.dark.orderedList, ref demo, ref dark, dark.list_marker, true);
+                    grab_color (ref demo.light.orderedList, ref demo, ref light, light.list_marker, false);
+                    break;
+                case 8:
+                    grab_color (ref demo.dark.image, ref demo, ref dark, dark.image_marker, true);
+                    grab_color (ref demo.light.image, ref demo, ref light, light.image_marker, false);
+                    break;
+                case 9:
+                    grab_color (ref demo.dark.emph, ref demo, ref dark, dark.emphasis, true);
+                    grab_color (ref demo.light.emph, ref demo, ref light, light.emphasis, false);
+                    break;
+                case 10:
+                    grab_color (ref demo.dark.strong, ref demo, ref dark, dark.strong, true);
+                    grab_color (ref demo.light.strong, ref demo, ref light, light.strong, false);
+                    break;
+                case 11:
+                    grab_color (ref demo.dark.strike, ref demo, ref dark, dark.deletion, true);
+                    grab_color (ref demo.light.strike, ref demo, ref light, light.deletion, false);
+                    break;
+            }
+        }
+    }
 
     public class ColorPalette {
         public string foreground_light { get; set; }

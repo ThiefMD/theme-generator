@@ -113,6 +113,16 @@ namespace ThiefMD {
 
             bar.set_custom_title (switcher);
 
+            Gtk.Button open_button = new Gtk.Button.with_label ("Open");
+            open_button.clicked.connect (() => {
+
+                File open_file = get_open_file ("Load Colors From Theme");
+                if (open_file.query_exists ()) {
+                    load_file (open_file);
+                }
+            });
+            bar.pack_start (open_button);
+
             preview_box.add (stack);
             preview_box.vexpand = true;
             preview_box.hexpand = true;
@@ -595,7 +605,43 @@ namespace ThiefMD {
             return grid;
         }
 
+        private void load_file (File file) {
+            try {
+                ColorPaletteLoader parser = new ColorPaletteLoader (file);
+                parser.copy_to (ref demo);
+                reverse_update_colors ();
+            } catch (Error e) {
+                warning ("Could not load file: %s", e.message);
+            }
+        }
+
         private void rebuild () {
+            build_themes ();
+            show_themes ();
+        }
+
+        private Gdk.RGBA color_to_rgba (string color) {
+            Gdk.RGBA ret_color = Gdk.RGBA ();
+            ret_color.parse (color);
+            return ret_color;
+        }
+
+        private void reverse_update_colors () {
+            light_fg.rgba = color_to_rgba (demo.pallet.foreground_light);
+            light_bg.rgba = color_to_rgba (demo.pallet.background_light);
+
+            for (int i = 0; i < 11; i++) {
+                light_pallet[i].rgba = color_to_rgba (demo.pallet.colors_light[i]);
+            }
+
+            dark_fg.rgba = color_to_rgba (demo.pallet.foreground_dark);
+            dark_bg.rgba = color_to_rgba (demo.pallet.background_dark);
+
+            for (int i = 0; i < 11; i++) {
+                dark_pallet[i].rgba = color_to_rgba (demo.pallet.colors_dark[i]);
+            }
+
+            state_change ();
             build_themes ();
             show_themes ();
         }

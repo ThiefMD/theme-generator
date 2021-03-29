@@ -41,6 +41,27 @@ namespace ThiefMD {
         return file;
     }
 
+    public File get_open_file (
+        string title)
+    {
+        var action = Gtk.FileChooserAction.OPEN;
+        var chooser = new Gtk.FileChooserNative (title, null, action, "_Open", "_Cancel");
+        chooser.action = action;
+
+        var ultheme = new Gtk.FileFilter ();
+        ultheme.set_filter_name (_("Ulysses Theme"));
+        ultheme.add_pattern ("*.ultheme");
+        chooser.add_filter (ultheme);
+
+        File file = null;
+        if (chooser.run () == Gtk.ResponseType.ACCEPT) {
+            file = chooser.get_file ();
+        }
+
+        chooser.destroy ();
+        return file;
+    }
+
     public bool write_ultheme_archive (string target_name) {
         bool success = false;
 
