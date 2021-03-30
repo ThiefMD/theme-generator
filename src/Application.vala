@@ -76,6 +76,8 @@ namespace ThiefMD {
 
             view_dark = new Gtk.SourceView ();
             view_dark.margin = 0;
+            view_dark.show_line_numbers = true;
+            view_light.highlight_current_line = true;
             buffer_dark = new Gtk.SourceBuffer.with_language (language);
             buffer_dark.highlight_syntax = true;
             view_dark.set_buffer (buffer_dark);
@@ -90,6 +92,8 @@ namespace ThiefMD {
 
             view_light = new Gtk.SourceView ();
             view_light.margin = 0;
+            view_light.show_line_numbers = true;
+            view_light.highlight_current_line = true;
             buffer_light = new Gtk.SourceBuffer.with_language (language);
             buffer_light.highlight_syntax = true;
             view_light.set_buffer (buffer_light);

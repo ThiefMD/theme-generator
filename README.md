@@ -37,7 +37,7 @@ libarchive-dev
 libclutter-1.0-dev
 libxml2-dev
 libgtk-3-dev
-libgtksourceview-3.0-dev
+libgtksourceview-4-dev
 ```
 
 ### Fedora
@@ -49,7 +49,7 @@ ninja-build
 cmake
 clutter-gtk-devel
 gtk3-devel
-gtksourceview3-devel
+gtksourceview4-devel
 libarchive-devel
 libxml2-devel
 libgee-devel
@@ -78,12 +78,16 @@ $ io.github.thiefmd.themegenerator
 
 ### Ulysses
 
-![](ulysses_preview.png)
+![](ulysses-preview.png)
 
 ### ThiefMD
 
-![](thiefmd_preview.png)
+![](thiefmd-preview.png)
 
 ### gedit
 
-![](gedit_preview.png)
+![](gedit-preview.png)
+
+### Builder
+
+![](builder-preview.png)
