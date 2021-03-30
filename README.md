@@ -70,12 +70,16 @@ $ io.github.thiefmd.themegenerator
 
 ### Ulysses
 
-![](ulysses_preview.png)
+![](ulysses-preview.png)
 
 ### ThiefMD
 
-![](thiefmd_preview.png)
+![](thiefmd-preview.png)
 
 ### gedit
 
-![](gedit_preview.png)
+![](gedit-preview.png)
+
+### Builder
+
+![](builder-preview.png)
