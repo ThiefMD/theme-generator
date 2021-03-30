@@ -1,3 +1,9 @@
+io.github.thiefmd.themegenerator (0.0.6) focal; urgency=low
+
+  * Allow for opening existing ultheme files
+
+ -- kmwallio <mwallio@gmail.com>  Mon, 29 Mar 2021 18:57:56 -0700
+
 io.github.thiefmd.themegenerator (0.0.5) focal; urgency=low
 
   * Match ThiefMD look in editor
