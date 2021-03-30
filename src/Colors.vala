@@ -585,6 +585,17 @@ namespace ThiefMD {
             }
             root->add_child (text);
 
+            Xml.Node* line_numbers = new Xml.Node (ns, "style");
+            line_numbers->new_prop ("name", "line-numbers");
+            if (dark) {
+                line_numbers->new_prop ("foreground", lighten (pallet.foreground_dark, 2));
+                line_numbers->new_prop ("background", lighten (pallet.background_dark, 1));
+            } else {
+                line_numbers->new_prop ("foreground", lighten (pallet.foreground_light, 1));
+                line_numbers->new_prop ("background", darken (pallet.background_light, 2));
+            }
+            root->add_child (line_numbers);
+
             // Come up with additional stylings not in file
             Xml.Node* selection = new Xml.Node (ns, "style");
             selection->new_prop ("name", "selection");
