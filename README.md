@@ -8,6 +8,14 @@ Generate Light and Dark Themes that can be exported to [GtkSourceView Style Sche
 
 ## Installation
 
+![Theme Generator](https://flathub.org/apps/details/io.github.thiefmd.themegenerator) is now available on Flathub. Make sure you've added [flathub](https://flatpak.org/setup) to your system.
+
+```bash
+flatpak install flathub io.github.thiefmd.themegenerator
+```
+
+### Ubuntu
+
 Builds can be found on [our PPA](https://launchpad.net/~thiefmd/+archive/ubuntu/thiefmd).
 
 ```bash
