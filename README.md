@@ -34,7 +34,6 @@ ninja-build
 valac
 cmake
 libarchive-dev
-libclutter-1.0-dev
 libxml2-dev
 libgtk-3-dev
 libgtksourceview-4-dev
@@ -47,7 +46,6 @@ vala
 meson
 ninja-build
 cmake
-clutter-gtk-devel
 gtk3-devel
 gtksourceview4-devel
 libarchive-devel

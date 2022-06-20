@@ -671,7 +671,7 @@ namespace ThiefMD {
         }
 
         private string get_hex_color (Gdk.RGBA rgba) {
-            Clutter.Color colour = Clutter.Color.from_string ("#FFFFFF");
+            Ultheme.Color colour = Ultheme.Color.from_string ("#FFFFFF");
             colour.red = (uint8)(255 * rgba.red);
             colour.green = (uint8)(255 * rgba.green);
             colour.blue = (uint8)(255 * rgba.blue);

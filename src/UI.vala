@@ -74,7 +74,7 @@ namespace ThiefMD {
             Regex valid_color = new Regex ("^#[A-Fa-f0-9]{6}$");
             GLib.MatchInfo info = null;
             if (valid_color.match (new_color, RegexMatchFlags.ANCHORED, out info)) {
-                Clutter.Color color = Clutter.Color.from_string (new_color);
+                Ultheme.Color color = Ultheme.Color.from_string (new_color);
                 Gdk.RGBA colour = Gdk.RGBA () {
                     red = color.red / 255.0,
                     green = color.green / 255.0,
@@ -111,8 +111,8 @@ namespace ThiefMD {
                 Regex valid_color = new Regex ("^#[A-Fa-f0-9]{6}$");
                 GLib.MatchInfo info = null;
                 if (valid_color.match (new_color, RegexMatchFlags.ANCHORED, out info)) {
-                    Clutter.Color color = Clutter.Color.from_string (new_color);
-                    float hue, lum, sat;
+                    Ultheme.Color color = Ultheme.Color.from_string (new_color);
+                    double hue, lum, sat;
                     color.to_hls (out hue, out lum, out sat);
                     string fg = "#000000";
                     if (hue < 0.4) {

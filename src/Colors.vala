@@ -1,6 +1,5 @@
 using Gtk;
 using Gee;
-using Clutter;
 
 namespace ThiefMD {
     public class ColorPaletteLoader : Ultheme.Parser {
@@ -771,7 +770,7 @@ namespace ThiefMD {
         }
 
         public string darken (string color, int how_much = 1) {
-            Color selection = Color.from_string (color);
+            Ultheme.Color selection = Ultheme.Color.from_string (color);
 
             while (how_much != 0) {
                 selection = selection.darken ();
@@ -784,7 +783,7 @@ namespace ThiefMD {
         }
 
         public string lighten (string color, int how_much = 1) {
-            Color selection = Color.from_string (color);
+            Ultheme.Color selection = Ultheme.Color.from_string (color);
 
             while (how_much != 0) {
                 selection = selection.darken ();
