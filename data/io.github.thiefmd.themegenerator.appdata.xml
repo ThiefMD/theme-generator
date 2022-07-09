@@ -52,6 +52,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.1.1" date="2022-07-09" urgency="low">
+      <description>
+        <p>Language Selection and GTK4! Want to see what you're theme will look like in non-Markdown scenarios? Now you can!</p>
+        <ul>
+          <li>Allow for selection a different language from Markdown</li>
+          <li>Now with GTK4 and GtkSourceview5</li>
+          <li>Fix crash on export</li>
+        </ul>
+      </description>
+      <url>https://github.com/ThiefMD/theme-generator/releases/tag/v0.1.1</url>
+    </release>
     <release version="0.1.0" date="2022-07-09" urgency="low">
       <description>
         <p>Language Selection and GTK4! Want to see what you're theme will look like in non-Markdown scenarios? Now you can!</p>

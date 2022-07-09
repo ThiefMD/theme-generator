@@ -139,7 +139,6 @@ namespace ThiefMD {
 
             view_dark = new GtkSource.View ();
             view_dark.show_line_numbers = true;
-            view_light.highlight_current_line = true;
             buffer_dark = new GtkSource.Buffer.with_language (language);
             buffer_dark.highlight_syntax = true;
             view_dark.set_buffer (buffer_dark);
@@ -153,6 +152,7 @@ namespace ThiefMD {
             });
 
             view_light = new GtkSource.View ();
+            view_light.highlight_current_line = true;
             view_light.show_line_numbers = true;
             view_light.highlight_current_line = true;
             buffer_light = new GtkSource.Buffer.with_language (language);
@@ -251,13 +251,15 @@ namespace ThiefMD {
                 if (theme_author == "") {
                     theme_author = "Super Awesome Creator";
                 }
+                build_real_themes (theme_name, theme_author);
                 get_save_location ("Save Light Theme", "xml", theme.get_text (), (light_target) => {
                     if (light_target != null){
                         try {
                             if (light_target.query_exists ()) {
                                 light_target.delete ();
                             }
-                            demo.build_lightscheme (light_target.get_path (), theme_name, theme_author);
+                            File temp_light = File.new_for_path (light_path);
+                            temp_light.copy (light_target, FileCopyFlags.OVERWRITE);
                         } catch (Error e) {
                             warning ("Could not save file: %s", e.message);
                         }
@@ -274,13 +276,15 @@ namespace ThiefMD {
                 if (theme_author == "") {
                     theme_author = "Super Awesome Creator";
                 }
+                build_real_themes (theme_name, theme_author);
                 get_save_location ("Save Dark Theme", "xml", theme.get_text (), (dark_target) => {
                     if (dark_target != null){
                         try {
                             if (dark_target.query_exists ()) {
                                 dark_target.delete ();
                             }
-                            demo.build_darkscheme (dark_target.get_path (), theme_name, theme_author);
+                            File temp_dark = File.new_for_path (dark_path);
+                            temp_dark.copy (dark_target, FileCopyFlags.OVERWRITE);
                         } catch (Error e) {
                             warning ("Could not save file: %s", e.message);
                         }
