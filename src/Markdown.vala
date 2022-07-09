@@ -176,6 +176,25 @@ namespace ThiefMD.Enrichments {
                 return;
             }
 
+            if (!((GtkSource.Buffer)buffer).language.get_name ().down ().contains ("markdown")) {
+                if (view.left_margin != 0) {
+                    Gtk.TextIter start, end;
+                    buffer.get_bounds (out start, out end);
+
+                    buffer.remove_tag (code_block, start, end);
+                    buffer.remove_tag (markdown_link, start, end);
+                    buffer.remove_tag (markdown_url, start, end);
+                    for (int h = 0; h < 6; h++) {
+                        buffer.remove_tag (heading_text[h], start, end);
+                    }
+                    view.left_margin = 0;
+                    view.right_margin = 0;
+                }
+            } else {
+                view.left_margin = 80;
+                view.right_margin = 80;
+            }
+
             recalculate_margins ();
 
             if (!checking.trylock ()) {

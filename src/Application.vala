@@ -131,6 +131,8 @@ namespace ThiefMD {
                         buffer_light.set_language (language);
                         break;
                 }
+                light_enrich.recheck_all ();
+                dark_enrich.recheck_all ();
             });
 
             bar.pack_end (language_picker);
