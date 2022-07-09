@@ -11,6 +11,9 @@ namespace ThiefMD {
         var action = Gtk.FileChooserAction.SAVE;
         var chooser = new Gtk.FileChooserNative (title, null, action, "_Save", "_Cancel");
         var suggestion = name.replace (" ", "-").replace ("/", "-").replace ("\\", "-");
+        if (suggestion == "") {
+            suggestion = "my-great-theme";
+        }
         chooser.action = action;
 
         if (ext == "xml") {
@@ -41,6 +44,7 @@ namespace ThiefMD {
                 callback (target);
             }
         });
+        chooser.show ();
     }
 
     public void get_open_file (
@@ -62,6 +66,7 @@ namespace ThiefMD {
                 callback (target);
             }
         });
+        chooser.show ();
     }
 
     public bool write_ultheme_archive (string target_name) {
