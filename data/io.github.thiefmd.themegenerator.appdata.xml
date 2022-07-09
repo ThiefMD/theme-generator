@@ -35,6 +35,10 @@
       <image>https://raw.githubusercontent.com/ThiefMD/theme-generator/master/theme-generator.png</image>
     </screenshot>
     <screenshot>
+      <caption>Theme Targetting Vala</caption>
+      <image>https://raw.githubusercontent.com/ThiefMD/theme-generator/master/theme-generator-vala.png</image>
+    </screenshot>
+    <screenshot>
       <caption>Generated Theme applied to gedit</caption>
       <image>https://raw.githubusercontent.com/ThiefMD/theme-generator/master/gedit-preview.png</image>
     </screenshot>
@@ -48,6 +52,16 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.1.0" date="2022-07-09" urgency="low">
+      <description>
+        <p>Language Selection and GTK4! Want to see what you're theme will look like in non-Markdown scenarios? Now you can!</p>
+        <ul>
+          <li>Allow for selection a different language from Markdown</li>
+          <li>Now with GTK4 and GtkSourceview5</li>
+        </ul>
+      </description>
+      <url>https://github.com/ThiefMD/theme-generator/releases/tag/v0.1.0</url>
+    </release>
     <release version="0.0.6" date="2021-03-29" urgency="low">
       <description>
         <p>Inital public release.</p>

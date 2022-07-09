@@ -6,6 +6,8 @@ Interested in Styling Markdown in [GtkSourceView](https://wiki.gnome.org/Project
 
 Generate Light and Dark Themes that can be exported to [GtkSourceView Style Schemes](https://wiki.gnome.org/Projects/GtkSourceView/StyleSchemes) or a single light and dark theme that can be used with Ulysses or ThiefMD.
 
+![](theme-generator-vala.png)
+
 ## Installation
 
 [Theme Generator](https://flathub.org/apps/details/io.github.thiefmd.themegenerator) is now available on Flathub. Make sure you've added [flathub](https://flatpak.org/setup) to your system.
@@ -35,8 +37,8 @@ valac
 cmake
 libarchive-dev
 libxml2-dev
-libgtk-3-dev
-libgtksourceview-4-dev
+libgtk-4-dev
+libgtksourceview-5-dev
 ```
 
 ### Fedora
@@ -46,8 +48,8 @@ vala
 meson
 ninja-build
 cmake
-gtk3-devel
-gtksourceview4-devel
+gtk4-devel
+gtksourceview5-devel
 libarchive-devel
 libxml2-devel
 libgee-devel
@@ -73,6 +75,8 @@ $ io.github.thiefmd.themegenerator
 ```
 
 ## Examples
+
+[Cheshire Light Theme](https://themes.thiefmd.com/2021/03/27/cheshire.html)
 
 ### Ulysses
 
