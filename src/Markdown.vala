@@ -21,7 +21,7 @@ using ThiefMD;
 
 namespace ThiefMD.Enrichments {
     public class MarkdownEnrichment {
-        private Gtk.SourceView view;
+        private GtkSource.View view;
         private Gtk.TextBuffer buffer;
         private Mutex checking;
         private bool markup_inserted_around_selection;
@@ -198,7 +198,7 @@ namespace ThiefMD.Enrichments {
             checking.unlock ();
         }
 
-        public bool attach (Gtk.SourceView textview) {
+        public bool attach (GtkSource.View textview) {
             if (textview == null) {
                 return false;
             }

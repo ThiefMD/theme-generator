@@ -1,13 +1,16 @@
 namespace ThiefMD {
 
-    public File get_save_location (
+    public delegate void OnFileCallback (File target);
+
+    public void get_save_location (
         string title,
-        string ext)
+        string ext,
+        string name,
+        OnFileCallback callback)
     {
         var action = Gtk.FileChooserAction.SAVE;
         var chooser = new Gtk.FileChooserNative (title, null, action, "_Save", "_Cancel");
-        chooser.set_do_overwrite_confirmation (true);
-
+        var suggestion = name.replace (" ", "-").replace ("/", "-").replace ("\\", "-");
         chooser.action = action;
 
         if (ext == "xml") {
@@ -17,7 +20,7 @@ namespace ThiefMD {
             xml.add_pattern ("*.xml");
             chooser.add_filter (xml);
 
-            chooser.set_current_name ("my-awesome-theme.xml");
+            chooser.set_current_name (suggestion + ".xml");
             chooser.set_filter (xml);
         }
 
@@ -28,21 +31,21 @@ namespace ThiefMD {
             ultheme.add_pattern ("*.ultheme");
             chooser.add_filter (ultheme);
 
-            chooser.set_current_name ("my-awesome-theme.ultheme");
+            chooser.set_current_name (suggestion + ".ultheme");
             chooser.set_filter (ultheme);
         }
 
-        File file = null;
-        if (chooser.run () == Gtk.ResponseType.ACCEPT) {
-            file = chooser.get_file ();
-        }
-
-        chooser.destroy ();
-        return file;
+        chooser.response.connect ((response) => {
+            if (response == Gtk.ResponseType.ACCEPT) {
+                File target = chooser.get_file ();
+                callback (target);
+            }
+        });
     }
 
-    public File get_open_file (
-        string title)
+    public void get_open_file (
+        string title,
+        OnFileCallback callback)
     {
         var action = Gtk.FileChooserAction.OPEN;
         var chooser = new Gtk.FileChooserNative (title, null, action, "_Open", "_Cancel");
@@ -53,13 +56,12 @@ namespace ThiefMD {
         ultheme.add_pattern ("*.ultheme");
         chooser.add_filter (ultheme);
 
-        File file = null;
-        if (chooser.run () == Gtk.ResponseType.ACCEPT) {
-            file = chooser.get_file ();
-        }
-
-        chooser.destroy ();
-        return file;
+        chooser.response.connect ((response) => {
+            if (response == Gtk.ResponseType.ACCEPT) {
+                File target = chooser.get_file ();
+                callback (target);
+            }
+        });
     }
 
     public bool write_ultheme_archive (string target_name) {
@@ -76,10 +78,10 @@ namespace ThiefMD {
             if (valid_color.match (new_color, RegexMatchFlags.ANCHORED, out info)) {
                 Ultheme.Color color = Ultheme.Color.from_string (new_color);
                 Gdk.RGBA colour = Gdk.RGBA () {
-                    red = color.red / 255.0,
-                    green = color.green / 255.0,
-                    blue = color.blue / 255.0,
-                    alpha = 1.0
+                    red = color.red / 255.0f,
+                    green = color.green / 255.0f,
+                    blue = color.blue / 255.0f,
+                    alpha = 1.0f
                 };
                 button = new Gtk.ColorButton.with_rgba (colour);
                 return button;
@@ -102,7 +104,7 @@ namespace ThiefMD {
             my_title = title;
             my_label = new Gtk.Label(my_title);
             my_label.use_markup = true;
-            add (my_label);
+            set_child (my_label);
             set_color_from_string (color);
         }
 
@@ -137,19 +139,18 @@ namespace ThiefMD {
         private Gtk.Grid pallet_grid = null;
         public PalletPopover (ref ColorPalette pallet, bool dark, bool fg) {
             build_grid (ref pallet, dark, fg);
-            add (pallet_grid);
+            set_child (pallet_grid);
         }
 
         public void update_pallet (ref ColorPalette pallet, bool dark, bool fg) {
-            remove (pallet_grid);
+            child = null;
             pallet_grid = null;
             build_grid (ref pallet, dark, fg);
-            add (pallet_grid);
+            set_child (pallet_grid);
         }
 
         private void build_grid (ref ColorPalette pallet, bool dark, bool fg) {
             pallet_grid = new Gtk.Grid ();
-            pallet_grid.margin = 6;
             pallet_grid.row_spacing = 6;
             pallet_grid.column_spacing = 12;
             pallet_grid.orientation = Gtk.Orientation.HORIZONTAL;
@@ -203,7 +204,7 @@ namespace ThiefMD {
                 }
             }
 
-            pallet_grid.show_all ();
+            pallet_grid.show ();
         }
     }
 }

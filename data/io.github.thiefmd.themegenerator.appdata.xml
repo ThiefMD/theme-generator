@@ -53,7 +53,7 @@
         <p>Inital public release.</p>
         <ul>
           <li>Allow for loading of color palettes</li>
-          <li>Allow export to Ultheme or Gtk.SourceView compatible XML themes</li>
+          <li>Allow export to Ultheme or GtkSource.View compatible XML themes</li>
         </ul>
       </description>
       <url>https://github.com/ThiefMD/theme-generator/releases/tag/v0.0.6-nowloading</url>

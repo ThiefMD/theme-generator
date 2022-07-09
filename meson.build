@@ -1,6 +1,6 @@
 # Name our project
 project('io.github.thiefmd.themegenerator', ['vala', 'c'],
-    version: '0.0.6'
+    version: '0.1.0'
 )
 
 # Application ID
@@ -50,8 +50,8 @@ executable(
     c_args: c_args,
     dependencies: [
         dependency('gobject-2.0'),
-        dependency('gtksourceview-4'),
-        dependency('gtk+-3.0'),
+        dependency('gtksourceview-5'),
+        dependency('gtk4'),
         dependency('gee-0.8'),
         dependency('libarchive'),
         dependency('libxml-2.0')

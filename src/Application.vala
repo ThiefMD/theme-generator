@@ -3,12 +3,12 @@ using ThiefMD.Enrichments;
 
 namespace ThiefMD {
     public class ThemeGenerator : Gtk.Application {
-        private Gtk.SourceView view_dark;
-        private Gtk.SourceView view_light;
-        private Gtk.SourceBuffer buffer_dark;
-        private Gtk.SourceBuffer buffer_light;
+        private GtkSource.View view_dark;
+        private GtkSource.View view_light;
+        private GtkSource.Buffer buffer_dark;
+        private GtkSource.Buffer buffer_light;
         public static string temp_dir;
-        public static Gtk.SourceStyleSchemeManager preview_manager;
+        public static GtkSource.StyleSchemeManager preview_manager;
         public ColorTheme demo;
         private string dark_path;
         private string light_path;
@@ -40,7 +40,7 @@ namespace ThiefMD {
             demo = new ColorTheme ();
             build_themes ();
 
-            preview_manager = new Gtk.SourceStyleSchemeManager ();
+            preview_manager = new GtkSource.StyleSchemeManager ();
             preview_manager.append_search_path (temp_dir);
             preview_manager.force_rescan ();
 
@@ -49,20 +49,14 @@ namespace ThiefMD {
             window.set_default_size (800, 600);
 
             // Attempt to set taskbar icon
-            try {
-                window.icon = Gtk.IconTheme.get_default ().load_icon ("io.github.thiefmd.themegenerator", Gtk.IconSize.DIALOG, 0);
-            } catch (Error e) {
-                warning ("Could not set application icon: %s", e.message);
-            }
+            window.set_icon_name ("io.github.thiefmd.themegenerator");
 
             bar = new Gtk.HeaderBar ();
-            bar.set_show_close_button (true);
-            bar.set_title ("");
 
             window.set_titlebar(bar);
-            var preview_box = new Gtk.ScrolledWindow (null, null);
+            var preview_box = new Gtk.ScrolledWindow ();
 
-            var manager = new Gtk.SourceLanguageManager ();
+            var manager = new GtkSource.LanguageManager ();
             string custom_languages = Path.build_path (
                 Path.DIR_SEPARATOR_S,
                 Build.PKGDATADIR,
@@ -141,11 +135,10 @@ namespace ThiefMD {
 
             bar.pack_end (language_picker);
 
-            view_dark = new Gtk.SourceView ();
-            view_dark.margin = 0;
+            view_dark = new GtkSource.View ();
             view_dark.show_line_numbers = true;
             view_light.highlight_current_line = true;
-            buffer_dark = new Gtk.SourceBuffer.with_language (language);
+            buffer_dark = new GtkSource.Buffer.with_language (language);
             buffer_dark.highlight_syntax = true;
             view_dark.set_buffer (buffer_dark);
             view_dark.set_wrap_mode (Gtk.WrapMode.WORD);
@@ -157,11 +150,10 @@ namespace ThiefMD {
                 dark_enrich.recheck_all ();
             });
 
-            view_light = new Gtk.SourceView ();
-            view_light.margin = 0;
+            view_light = new GtkSource.View ();
             view_light.show_line_numbers = true;
             view_light.highlight_current_line = true;
-            buffer_light = new Gtk.SourceBuffer.with_language (language);
+            buffer_light = new GtkSource.Buffer.with_language (language);
             buffer_light.highlight_syntax = true;
             view_light.set_buffer (buffer_light);
             view_light.set_wrap_mode (Gtk.WrapMode.WORD);
@@ -182,24 +174,24 @@ namespace ThiefMD {
             switcher.set_stack (stack);
             switcher.halign = Gtk.Align.CENTER;
 
-            bar.set_custom_title (switcher);
+            bar.set_title_widget (switcher);
 
             Gtk.Button open_button = new Gtk.Button.with_label ("Open");
             open_button.clicked.connect (() => {
 
-                File open_file = get_open_file ("Load Colors From Theme");
-                if (open_file.query_exists ()) {
-                    load_file (open_file);
-                }
+                get_open_file ("Load Colors From Theme", (open_file) => {
+                    if (open_file.query_exists ()) {
+                        load_file (open_file);
+                    }
+                });
             });
             bar.pack_start (open_button);
 
-            preview_box.add (stack);
+            preview_box.set_child (stack);
             preview_box.vexpand = true;
             preview_box.hexpand = true;
 
             Gtk.Grid window_grid = new Gtk.Grid ();
-            window_grid.margin = 0;
             window_grid.row_spacing = 12;
             window_grid.column_spacing = 12;
             window_grid.orientation = Gtk.Orientation.VERTICAL;
@@ -207,24 +199,23 @@ namespace ThiefMD {
             window_grid.vexpand = true;
 
             window_grid.attach (pallet_grid (), 0, 0);
-            var syntax_box = new Gtk.ScrolledWindow (null, null);
-            syntax_box.add (syntax_grid ());
+            var syntax_box = new Gtk.ScrolledWindow ();
+            syntax_box.set_child (syntax_grid ());
             syntax_box.vexpand = true;
             syntax_box.hexpand = true;
-            syntax_box.show_all ();
+            syntax_box.show ();
             window_grid.attach (syntax_box, 0, 1, 1, 3);
             window_grid.attach (preview_box, 0, 4, 1, 4);
 
             show_themes ();
 
-            window.add (window_grid);
-            window.show_all ();
-            bar.show_all ();
+            window.set_child (window_grid);
+            window.show ();
+            bar.show ();
         }
 
         public Gtk.Grid export_grid () {
             Gtk.Grid grid = new Gtk.Grid ();
-            grid.margin = 6;
             grid.row_spacing = 6;
             grid.column_spacing = 6;
             grid.orientation = Gtk.Orientation.VERTICAL;
@@ -258,17 +249,18 @@ namespace ThiefMD {
                 if (theme_author == "") {
                     theme_author = "Super Awesome Creator";
                 }
-                File light_target = get_save_location ("Save Light Theme", "xml");
-                if (light_target != null){
-                    try {
-                        if (light_target.query_exists ()) {
-                            light_target.delete ();
+                get_save_location ("Save Light Theme", "xml", theme.get_text (), (light_target) => {
+                    if (light_target != null){
+                        try {
+                            if (light_target.query_exists ()) {
+                                light_target.delete ();
+                            }
+                            demo.build_lightscheme (light_target.get_path (), theme_name, theme_author);
+                        } catch (Error e) {
+                            warning ("Could not save file: %s", e.message);
                         }
-                        demo.build_lightscheme (light_target.get_path (), theme_name, theme_author);
-                    } catch (Error e) {
-                        warning ("Could not save file: %s", e.message);
                     }
-                }
+                });
             });
 
             save_dark.clicked.connect (() => {
@@ -280,17 +272,18 @@ namespace ThiefMD {
                 if (theme_author == "") {
                     theme_author = "Super Awesome Creator";
                 }
-                File dark_target = get_save_location ("Save Dark Theme", "xml");
-                if (dark_target != null){
-                    try {
-                        if (dark_target.query_exists ()) {
-                            dark_target.delete ();
+                get_save_location ("Save Dark Theme", "xml", theme.get_text (), (dark_target) => {
+                    if (dark_target != null){
+                        try {
+                            if (dark_target.query_exists ()) {
+                                dark_target.delete ();
+                            }
+                            demo.build_darkscheme (dark_target.get_path (), theme_name, theme_author);
+                        } catch (Error e) {
+                            warning ("Could not save file: %s", e.message);
                         }
-                        demo.build_darkscheme (dark_target.get_path (), theme_name, theme_author);
-                    } catch (Error e) {
-                        warning ("Could not save file: %s", e.message);
                     }
-                }
+                });
             });
 
             save_ultheme.clicked.connect (() => {
@@ -303,50 +296,51 @@ namespace ThiefMD {
                     theme_author = "Super Awesome Creator";
                 }
                 build_real_themes (theme_name, theme_author);
-                File ulysses_target = get_save_location ("Save Ulysses Theme", "ultheme");
-                if (ulysses_target != null){
-                    try {
-                        if (ulysses_target.query_exists ()) {
-                            ulysses_target.delete ();
-                        }
-                        File working_dir = File.new_for_path(temp_dir);
-
-                        Archive.Write archive = new Archive.Write ();
-                        archive.add_filter_none ();
-                        archive.set_format_zip ();
-                        archive.open_filename (ulysses_target.get_path ());
-                        File ulysses_theme = File.new_for_path(ultheme_path);
-                        FileInfo ulysses_theme_info = ulysses_theme.query_info (GLib.FileAttribute.STANDARD_SIZE, GLib.FileQueryInfoFlags.NONE);
-                        FileInputStream input_stream = ulysses_theme.read ();
-                        DataInputStream data_input_stream = new DataInputStream (input_stream);
-
-                        Archive.Entry entry = new Archive.Entry ();
-                        entry.set_pathname (working_dir.get_relative_path (ulysses_theme));
-                        entry.set_size ((Archive.int64_t) ulysses_theme_info.get_size ());
-                        entry.set_filetype (Archive.FileType.IFREG);
-                        entry.set_perm (0644);
-
-                        if (archive.write_header (entry) != Archive.Result.OK) {
-                            warning ("Could not save file: %s (%d)", archive.error_string (), archive.errno ());
-                            return;
-                        }
-
-                        size_t bytes_read;
-                        uint8[] buffer = new uint8[64];
-                        while (data_input_stream.read_all (buffer, out bytes_read)) {
-                            if (bytes_read <= 0) {
-                                break;
+                get_save_location ("Save Ulysses Theme", "ultheme", theme.get_text (), (ulysses_target) => {
+                    if (ulysses_target != null){
+                        try {
+                            if (ulysses_target.query_exists ()) {
+                                ulysses_target.delete ();
                             }
-                            archive.write_data (buffer);
-                        }
+                            File working_dir = File.new_for_path(temp_dir);
 
-                        if (archive.close() != Archive.Result.OK) {
-                            warning ("Could not close file: %s (%d)", archive.error_string (), archive.errno ());
+                            Archive.Write archive = new Archive.Write ();
+                            archive.add_filter_none ();
+                            archive.set_format_zip ();
+                            archive.open_filename (ulysses_target.get_path ());
+                            File ulysses_theme = File.new_for_path(ultheme_path);
+                            FileInfo ulysses_theme_info = ulysses_theme.query_info (GLib.FileAttribute.STANDARD_SIZE, GLib.FileQueryInfoFlags.NONE);
+                            FileInputStream input_stream = ulysses_theme.read ();
+                            DataInputStream data_input_stream = new DataInputStream (input_stream);
+
+                            Archive.Entry entry = new Archive.Entry ();
+                            entry.set_pathname (working_dir.get_relative_path (ulysses_theme));
+                            entry.set_size ((Archive.int64_t) ulysses_theme_info.get_size ());
+                            entry.set_filetype (Archive.FileType.IFREG);
+                            entry.set_perm (0644);
+
+                            if (archive.write_header (entry) != Archive.Result.OK) {
+                                warning ("Could not save file: %s (%d)", archive.error_string (), archive.errno ());
+                                return;
+                            }
+
+                            size_t bytes_read;
+                            uint8[] buffer = new uint8[64];
+                            while (data_input_stream.read_all (buffer, out bytes_read)) {
+                                if (bytes_read <= 0) {
+                                    break;
+                                }
+                                archive.write_data (buffer);
+                            }
+
+                            if (archive.close() != Archive.Result.OK) {
+                                warning ("Could not close file: %s (%d)", archive.error_string (), archive.errno ());
+                            }
+                        } catch (Error e) {
+                            warning ("Could not save file: %s", e.message);
                         }
-                    } catch (Error e) {
-                        warning ("Could not save file: %s", e.message);
                     }
-                }
+                });
             });
 
             return grid;
@@ -354,7 +348,6 @@ namespace ThiefMD {
 
         public Gtk.Grid syntax_grid () {
             Gtk.Grid grid = new Gtk.Grid ();
-            grid.margin = 6;
             grid.row_spacing = 6;
             grid.column_spacing = 6;
             grid.orientation = Gtk.Orientation.VERTICAL;
@@ -450,7 +443,7 @@ namespace ThiefMD {
             grid.attach (color_map_item (6, false), 1, 12);
             grid.attach (color_map_item (6, true), 2, 12);
 
-            grid.show_all ();
+            grid.show ();
             return grid;
         }
 
@@ -516,7 +509,6 @@ namespace ThiefMD {
 
         public Gtk.Grid color_map_item (int elem, bool dark) {
             Gtk.Grid grid = new Gtk.Grid ();
-            grid.margin = 6;
             grid.row_spacing = 6;
             grid.column_spacing = 6;
             grid.orientation = Gtk.Orientation.VERTICAL;
@@ -540,30 +532,37 @@ namespace ThiefMD {
             }
             ThiefColorButton fg_button = new ThiefColorButton (fg_color);
             fg_button.set_tooltip_text (_("Foreground Color"));
+            PalletPopover fg_popover = new PalletPopover (ref demo.pallet, dark, true);
+            fg_popover.set_default_widget (fg_button);
+            fg_popover.set_parent (fg_button);
             fg_button.clicked.connect (() => {
-                PalletPopover popover = new PalletPopover (ref demo.pallet, dark, true);
-                popover.set_relative_to (fg_button);
-                popover.update_pallet (ref demo.pallet, dark, true);
-                popover.popup ();
-                popover.clicked.connect (() => {
-                    item.fg = popover.value;
-                    state_change ();
-                    rebuild ();
-                });
+                fg_popover.update_pallet (ref demo.pallet, dark, true);
+                fg_popover.popup ();
+                state_change ();
+                rebuild ();
+            });
+            fg_popover.clicked.connect (() => {
+                item.fg = fg_popover.value;
+                state_change ();
+                rebuild ();
             });
 
             ThiefColorButton bg_button = new ThiefColorButton (bg_color);
+            PalletPopover bg_popover = new PalletPopover (ref demo.pallet, dark, false);
+            bg_popover.set_default_widget (bg_button);
+            bg_popover.set_parent (bg_button);
             bg_button.set_tooltip_text (_("Background Color"));
             bg_button.clicked.connect (() => {
-                PalletPopover popover = new PalletPopover (ref demo.pallet, dark, false);
-                popover.set_relative_to (bg_button);
-                popover.update_pallet (ref demo.pallet, dark, false);
-                popover.popup ();
-                popover.clicked.connect (() => {
-                    item.bg = popover.value;
-                    state_change ();
-                    rebuild ();
-                });
+                bg_popover.update_pallet (ref demo.pallet, dark, false);
+                bg_popover.popup ();
+                state_change ();
+                rebuild ();
+            });
+
+            bg_popover.clicked.connect (() => {
+                item.bg = bg_popover.value;
+                state_change ();
+                rebuild ();
             });
 
             state_change.connect (() => {
@@ -585,7 +584,7 @@ namespace ThiefMD {
             });
 
             Gtk.ToggleButton bold = new Gtk.ToggleButton ();
-            bold.set_image (new Gtk.Image.from_icon_name ("format-text-bold-symbolic", Gtk.IconSize.SMALL_TOOLBAR));
+            bold.icon_name = "format-text-bold-symbolic";
             bold.set_tooltip_text (_("Bold"));
             bold.set_active(item.bold);
             bold.clicked.connect (() => {
@@ -594,7 +593,7 @@ namespace ThiefMD {
             });
 
             Gtk.ToggleButton underline = new Gtk.ToggleButton ();
-            underline.set_image (new Gtk.Image.from_icon_name ("format-text-underline-symbolic", Gtk.IconSize.SMALL_TOOLBAR));
+            underline.icon_name = "format-text-underline-symbolic";
             underline.set_tooltip_text (_("Underline"));
             underline.set_active (item.underline);
             underline.clicked.connect (() => {
@@ -603,7 +602,7 @@ namespace ThiefMD {
             });
 
             Gtk.ToggleButton italic = new Gtk.ToggleButton ();
-            italic.set_image (new Gtk.Image.from_icon_name ("format-text-italic-symbolic", Gtk.IconSize.SMALL_TOOLBAR));
+            italic.icon_name = "format-text-italic-symbolic";
             italic.set_tooltip_text (_("Italics"));
             italic.set_active (item.italic);
             italic.clicked.connect (() => {
@@ -612,7 +611,7 @@ namespace ThiefMD {
             });
 
             Gtk.ToggleButton strikethrough = new Gtk.ToggleButton ();
-            strikethrough.set_image (new Gtk.Image.from_icon_name ("format-text-strikethrough-symbolic", Gtk.IconSize.SMALL_TOOLBAR));
+            strikethrough.icon_name = "format-text-strikethrough-symbolic";
             strikethrough.set_tooltip_text (_("Strikethrough"));
             strikethrough.set_active (item.strikethrough);
             strikethrough.clicked.connect (() => {
@@ -638,7 +637,6 @@ namespace ThiefMD {
         Gtk.ColorButton[] dark_pallet;
         public Gtk.Grid pallet_grid () {
             Gtk.Grid grid = new Gtk.Grid ();
-            grid.margin = 6;
             grid.row_spacing = 6;
             grid.column_spacing = 6;
             grid.orientation = Gtk.Orientation.VERTICAL;
@@ -692,7 +690,7 @@ namespace ThiefMD {
                 grid.attach (dark_pallet[i], 3 + i, 1);
             }
 
-            grid.show_all ();
+            grid.show ();
             return grid;
         }
 

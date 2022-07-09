@@ -1,7 +1,7 @@
 [submodule "data/language-specs"]
 	path = data/language-specs
 	url = https://github.com/ThiefMD/custom-gtksourceview-languages.git
-	branch = main
+	branch = gtksourceview5
 [submodule "src/ultheme"]
 	path = src/ultheme
 	url = https://github.com/TwiRp/ultheme-vala.git

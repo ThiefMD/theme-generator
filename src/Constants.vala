@@ -2,16 +2,6 @@ using Gtk;
 using Gdk;
 
 namespace ThiefMD {
-    public enum Target {
-        STRING,
-        URI
-    }
-
-    public const TargetEntry[] target_list = {
-        { "STRING" , 0, Target.STRING },
-        { "text/uri-list", 0, Target.URI }
-    };
-
     public static void save_file (File save_file, uint8[] buffer) throws Error {
         var output = new DataOutputStream (save_file.create(FileCreateFlags.REPLACE_DESTINATION));
         long written = 0;
