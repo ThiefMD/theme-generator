@@ -74,6 +74,73 @@ namespace ThiefMD {
             manager.set_search_path (language_paths);
             var language = manager.guess_language (null, "text/markdown");
 
+            var language_picker = new Gtk.ComboBoxText ();
+            language_picker.append_text ("Markdown");
+            language_picker.append_text ("C/C++");
+            language_picker.append_text ("HTML");
+            language_picker.append_text ("Python");
+            language_picker.append_text ("C#");
+            language_picker.append_text ("Vala");
+            language_picker.append_text ("Rust");
+            language_picker.set_active (0);
+
+            language_picker.changed.connect (() => {
+                var selected = language_picker.get_active_text ();
+                switch (selected.down ()) {
+                    case "markdown":
+                        language = manager.guess_language (null, "text/markdown");
+                        buffer_dark.set_text (IPSUM);
+                        buffer_dark.set_language (language);
+                        buffer_light.set_text (IPSUM);
+                        buffer_light.set_language (language);
+                        break;
+                    case "c/c++":
+                        language = manager.guess_language (null, "text/x-cpp");
+                        buffer_dark.set_text (c);
+                        buffer_dark.set_language (language);
+                        buffer_light.set_text (c);
+                        buffer_light.set_language (language);
+                        break;
+                    case "html":
+                        language = manager.guess_language (null, "text/html");
+                        buffer_dark.set_text (html);
+                        buffer_dark.set_language (language);
+                        buffer_light.set_text (html);
+                        buffer_light.set_language (language);
+                        break;
+                    case "python":
+                        language = manager.guess_language (null, "text/x-python3");
+                        buffer_dark.set_text (py);
+                        buffer_dark.set_language (language);
+                        buffer_light.set_text (py);
+                        buffer_light.set_language (language);
+                        break;
+                    case "c#":
+                        language = manager.guess_language (null, "text/x-csharp");
+                        buffer_dark.set_text (cs);
+                        buffer_dark.set_language (language);
+                        buffer_light.set_text (cs);
+                        buffer_light.set_language (language);
+                        break;
+                    case "vala":
+                        language = manager.guess_language (null, "text/x-vala");
+                        buffer_dark.set_text (cs);
+                        buffer_dark.set_language (language);
+                        buffer_light.set_text (cs);
+                        buffer_light.set_language (language);
+                        break;
+                    case "rust":
+                        language = manager.guess_language (null, "text/rust");
+                        buffer_dark.set_text (rust);
+                        buffer_dark.set_language (language);
+                        buffer_light.set_text (rust);
+                        buffer_light.set_language (language);
+                        break;
+                }
+            });
+
+            bar.pack_end (language_picker);
+
             view_dark = new Gtk.SourceView ();
             view_dark.margin = 0;
             view_dark.show_line_numbers = true;
@@ -304,21 +371,29 @@ namespace ThiefMD {
             grid.attach (dark, 2, 0);
 
             Gtk.Label headings = new Gtk.Label (_("Headings"));
+            headings.has_tooltip = true;
+            headings.tooltip_text = "def:type, def:heading";
             grid.attach (headings, 0, 1);
             grid.attach (color_map_item (0, false), 1, 1);
             grid.attach (color_map_item (0, true), 2, 1);
 
             Gtk.Label strong = new Gtk.Label (_("Strong"));
+            strong.has_tooltip = true;
+            strong.tooltip_text = "def:statement";
             grid.attach (strong, 0, 2);
             grid.attach (color_map_item (10, false), 1, 2);
             grid.attach (color_map_item (10, true), 2, 2);
 
             Gtk.Label emphasis = new Gtk.Label (_("Emphasis"));
+            emphasis.has_tooltip = true;
+            emphasis.tooltip_text = "def:doc-comment-element";
             grid.attach (emphasis, 0, 3);
             grid.attach (color_map_item (9, false), 1, 3);
             grid.attach (color_map_item (9, true), 2, 3);
 
             Gtk.Label strikethrough = new Gtk.Label (_("Deleted"));
+            strikethrough.has_tooltip = true;
+            strikethrough.tooltip_text = "def:deletion";
             grid.attach (strikethrough, 0, 4);
             grid.attach (color_map_item (11, false), 1, 4);
             grid.attach (color_map_item (11, true), 2, 4);
@@ -329,11 +404,15 @@ namespace ThiefMD {
             grid.attach (color_map_item (8, true), 2, 5);
 
             Gtk.Label link = new Gtk.Label (_("Link"));
+            link.has_tooltip = true;
+            link.tooltip_text = "def:underlined, def:preprocessor, def:constant, def:net-address, def:link-destination, def:type";
             grid.attach (link, 0, 6);
             grid.attach (color_map_item (5, false), 1, 6);
             grid.attach (color_map_item (5, true), 2, 6);
 
             Gtk.Label code = new Gtk.Label (_("Inline Code"));
+            code.has_tooltip = true;
+            code.tooltip_text = "def:identifier";
             grid.attach (code, 0, 7);
             grid.attach (color_map_item (2, false), 1, 7);
             grid.attach (color_map_item (2, true), 2, 7);
@@ -344,21 +423,29 @@ namespace ThiefMD {
             grid.attach (color_map_item (1, true), 2, 8);
 
             Gtk.Label comment = new Gtk.Label (_("Comment"));
+            comment.has_tooltip = true;
+            comment.tooltip_text = "def:special-char, def:comment";
             grid.attach (comment, 0, 9);
             grid.attach (color_map_item (3, false), 1, 9);
             grid.attach (color_map_item (3, true), 2, 9);
 
             Gtk.Label blockquote = new Gtk.Label (_("Blockquote"));
+            blockquote.has_tooltip = true;
+            blockquote.tooltip_text = "def:shebang";
             grid.attach (blockquote, 0, 10);
             grid.attach (color_map_item (4, false), 1, 10);
             grid.attach (color_map_item (4, true), 2, 10);
 
             Gtk.Label listitem = new Gtk.Label (_("List Item"));
+            listitem.has_tooltip = true;
+            listitem.tooltip_text = "def:statement";
             grid.attach (listitem, 0, 11);
             grid.attach (color_map_item (7, false), 1, 11);
             grid.attach (color_map_item (7, true), 2, 11);
 
             Gtk.Label divider = new Gtk.Label (_("Divider"));
+            divider.has_tooltip = true;
+            divider.tooltip_text = "def:note";
             grid.attach (divider, 0, 12);
             grid.attach (color_map_item (6, false), 1, 12);
             grid.attach (color_map_item (6, true), 2, 12);

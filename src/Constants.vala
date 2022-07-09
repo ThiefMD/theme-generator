@@ -19,6 +19,45 @@ namespace ThiefMD {
             written += output.write (buffer[written:buffer.length]);
     }
 
+    public const string c = """#include <stdio.h>
+// Write a function
+int main() {
+    // Say hello
+    printf("Hello World!");
+    return 0;
+}""";
+
+    public const string cs = """class Hello {
+    // Write a method
+    public static void Main(string[] args) {
+        // Say hello
+        Console.WriteLine("Hello World!");
+    }
+}""";
+
+    public const string py = """# Declare a function
+def main():
+    # Say hello to the world
+    print "Hello World!"
+""";
+
+    public const string rust = """// This is the main function
+fn main() {
+    // Print text to the console
+    println!("Hello World!");
+}""";
+
+    public const string html = """<html>
+    <head>
+        <!-- Set a title -->
+        <title>Hello World!</title>
+    </head>
+    <body>
+        <!-- Display some text -->
+        <h1 id="title">Hello World!</h1>
+    </body>
+</html>""";
+
     public const string IPSUM = """---
 title: This is Sample YAML
 tags: filler, sample, example
