@@ -4,9 +4,13 @@ Interested in Styling Markdown in [GtkSourceView](https://wiki.gnome.org/Project
 
 ![](theme-generator.png)
 
+[Special Event 21](https://themes.thiefmd.com/2021/04/18/special-event-21.html)
+
 Generate Light and Dark Themes that can be exported to [GtkSourceView Style Schemes](https://wiki.gnome.org/Projects/GtkSourceView/StyleSchemes) or a single light and dark theme that can be used with Ulysses or ThiefMD.
 
 ![](theme-generator-vala.png)
+
+[Violet Neon](https://themes.thiefmd.com/2021/03/10/violet-neon.html)
 
 ## Installation
 
