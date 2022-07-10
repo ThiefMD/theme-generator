@@ -1,6 +1,6 @@
 # Name our project
 project('io.github.thiefmd.themegenerator', ['vala', 'c'],
-    version: '0.1.1'
+    version: '0.1.2'
 )
 
 # Application ID
@@ -45,6 +45,7 @@ executable(
     'src/Colors.vala',
     'src/UI.vala',
     'src/Markdown.vala',
+    'src/Fountain.vala',
     'src/ultheme/src/Ultheme.vala',
     'src/ultheme/src/HexColors.vala',
     c_args: c_args,

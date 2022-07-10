@@ -187,10 +187,14 @@ namespace ThiefMD.Enrichments {
                     for (int h = 0; h < 6; h++) {
                         buffer.remove_tag (heading_text[h], start, end);
                     }
+                    if (((GtkSource.Buffer)buffer).language.get_name ().down ().contains ("fountain")) {
+                        return;
+                    }
                     view.left_margin = 0;
                     view.right_margin = 0;
                 }
-            } else {
+                return;
+            } else if (((GtkSource.Buffer)buffer).language.get_name ().down ().contains ("markdown")) {
                 view.left_margin = 80;
                 view.right_margin = 80;
             }

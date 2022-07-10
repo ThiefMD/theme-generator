@@ -9,6 +9,24 @@ namespace ThiefMD {
             written += output.write (buffer[written:buffer.length]);
     }
 
+    public const string fountain = """INT. OFFICE - NIGHT
+
+A DEVELOPER is modifying a theme.
+
+DEVELOPER
+(thinking aloud)
+I wonder what type of theme I should make.
+
+The developer clicks and changes some colors.
+
+DEVELOPER
+This would be easier if I wasn't colorblind...
+
+The camera pans away from the developer. There is a shine near the developer's eyes. It's unclear if these are tears or a reflection from the monitor.
+
+> FADE TO BLACK.
+""";
+
     public const string c = """#include <stdio.h>
 // Write a function
 int main() {

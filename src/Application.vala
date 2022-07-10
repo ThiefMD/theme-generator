@@ -18,6 +18,8 @@ namespace ThiefMD {
         public signal void state_change ();
         MarkdownEnrichment light_enrich;
         MarkdownEnrichment dark_enrich;
+        FountainEnrichment light_fountain;
+        FountainEnrichment dark_fountain;
 
         public ThemeGenerator () {
             Object (
@@ -70,6 +72,7 @@ namespace ThiefMD {
 
             var language_picker = new Gtk.ComboBoxText ();
             language_picker.append_text ("Markdown");
+            language_picker.append_text ("Fountain");
             language_picker.append_text ("C/C++");
             language_picker.append_text ("HTML");
             language_picker.append_text ("Python");
@@ -84,55 +87,51 @@ namespace ThiefMD {
                     case "markdown":
                         language = manager.guess_language (null, "text/markdown");
                         buffer_dark.set_text (IPSUM);
-                        buffer_dark.set_language (language);
                         buffer_light.set_text (IPSUM);
-                        buffer_light.set_language (language);
+                        break;
+                    case "fountain":
+                        language = manager.guess_language (null, "text/fountain");
+                        buffer_dark.set_text (fountain);
+                        buffer_light.set_text (fountain);
                         break;
                     case "c/c++":
                         language = manager.guess_language (null, "text/x-cpp");
                         buffer_dark.set_text (c);
-                        buffer_dark.set_language (language);
                         buffer_light.set_text (c);
-                        buffer_light.set_language (language);
                         break;
                     case "html":
                         language = manager.guess_language (null, "text/html");
                         buffer_dark.set_text (html);
-                        buffer_dark.set_language (language);
                         buffer_light.set_text (html);
-                        buffer_light.set_language (language);
                         break;
                     case "python":
                         language = manager.guess_language (null, "text/x-python3");
                         buffer_dark.set_text (py);
-                        buffer_dark.set_language (language);
                         buffer_light.set_text (py);
-                        buffer_light.set_language (language);
                         break;
                     case "c#":
                         language = manager.guess_language (null, "text/x-csharp");
                         buffer_dark.set_text (cs);
-                        buffer_dark.set_language (language);
                         buffer_light.set_text (cs);
-                        buffer_light.set_language (language);
                         break;
                     case "vala":
                         language = manager.guess_language (null, "text/x-vala");
                         buffer_dark.set_text (cs);
-                        buffer_dark.set_language (language);
                         buffer_light.set_text (cs);
-                        buffer_light.set_language (language);
                         break;
                     case "rust":
                         language = manager.guess_language (null, "text/rust");
                         buffer_dark.set_text (rust);
-                        buffer_dark.set_language (language);
                         buffer_light.set_text (rust);
-                        buffer_light.set_language (language);
                         break;
                 }
+                buffer_light.set_language (language);
+                buffer_dark.set_language (language);
                 light_enrich.recheck_all ();
                 dark_enrich.recheck_all ();
+                dark_fountain.recheck_all ();
+                light_fountain.recheck_all ();
+                
             });
 
             bar.pack_end (language_picker);
@@ -147,8 +146,12 @@ namespace ThiefMD {
             dark_enrich = new MarkdownEnrichment ();
             dark_enrich.attach (view_dark);
             dark_enrich.recheck_all ();
+            dark_fountain = new FountainEnrichment ();
+            dark_fountain.attach (view_dark);
+            dark_fountain.recheck_all ();
             buffer_dark.changed.connect (() => {
                 dark_enrich.recheck_all ();
+                dark_fountain.recheck_all ();
             });
 
             view_light = new GtkSource.View ();
@@ -163,8 +166,12 @@ namespace ThiefMD {
             light_enrich = new MarkdownEnrichment ();
             light_enrich.attach (view_light);
             light_enrich.recheck_all ();
+            light_fountain = new FountainEnrichment ();
+            light_fountain.attach (view_light);
+            light_fountain.recheck_all ();
             buffer_light.changed.connect (() => {
                 light_enrich.recheck_all ();
+                light_fountain.recheck_all ();
             });
 
             stack = new Gtk.Stack ();
