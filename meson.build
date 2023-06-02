@@ -1,6 +1,6 @@
 # Name our project
 project('io.github.thiefmd.themegenerator', ['vala', 'c'],
-    version: '0.1.2'
+    version: '0.1.3'
 )
 
 # Application ID
