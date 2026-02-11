@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2018 Miles Wallio <mwallio@gmail.com> -->
-<component type="desktop">
-  <id>io.github.thiefmd.themegenerator.desktop</id>
+<component type="desktop-application">
+  <id>io.github.thiefmd.themegenerator</id>
   <metadata_license>MIT</metadata_license>
   <project_license>MIT</project_license>
   <name>ThemeGenerator</name>
-  <launchable type="desktop-id">io.github.thiefmd.themegenerator.desktop</launchable>
-  <summary>Generate Styles with Style.</summary>
+  <summary>Generate Styles with Style</summary>
   <description>
     <p>Need to generate a Ultheme or GtkSourceView Scheme for Markdown? Look no further.</p>
     <p>Themes are compatible with ThiefMD, gedit, GNOME Builder, Editors based on GtkSourceView, and Ulysses.</p>
   </description>
-  <developer_name>kmwallio</developer_name>
+  <developer id="io.github.kmwallio">
+    <name>kmwallio</name>
+  </developer>
   <url type="homepage">https://github.com/ThiefMD/theme-generator</url>
   <url type="bugtracker">https://github.com/ThiefMD/theme-generator/issues</url>
+  <url type="vcs-browser">https://github.com/ThiefMD/theme-generator</url>
   <url type="help">https://themes.thiefmd.com/howto</url>
+  <launchable type="desktop-id">io.github.thiefmd.themegenerator.desktop</launchable>
   <content_rating type="oars-1.1">
     <content_attribute id="language-humor">mild</content_attribute>
   </content_rating>
+  <provides>
+    <id>io.github.thiefmd.themegenerator.desktop</id>
+  </provides>
+  <replaces>
+      <id>io.github.thiefmd.themegenerator.desktop</id>
+  </replaces>
   <screenshots>
     <screenshot type="default">
       <caption>Theme Generator Window</caption>
