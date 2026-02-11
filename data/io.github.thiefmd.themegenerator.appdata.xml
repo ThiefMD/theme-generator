@@ -18,17 +18,6 @@
   <content_rating type="oars-1.1">
     <content_attribute id="language-humor">mild</content_attribute>
   </content_rating>
-  <categories>
-    <category>Utility</category>
-  </categories>
-  <keywords>
-    <keyword>markdown</keyword>
-    <keyword>ulysses</keyword>
-    <keyword>customization</keyword>
-    <keyword>gtksourceview</keyword>
-    <keyword>sourceview</keyword>
-    <keyword>thiefmd</keyword>
-  </keywords>
   <screenshots>
     <screenshot type="default">
       <caption>Theme Generator Window</caption>
