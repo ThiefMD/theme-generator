@@ -50,6 +50,12 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.1.4" date="2026-02-11" urgency="low">
+      <description>
+        <p>Updated to GTK4 and GtkSourceView 5</p>
+      </description>
+      <url>https://github.com/ThiefMD/theme-generator/releases/tag/v0.1.4</url>
+    </release>
     <release version="0.1.3" date="2022-07-09" urgency="low">
       <description>
         <p>Maintanence release for updating build to latest SDK</p>
