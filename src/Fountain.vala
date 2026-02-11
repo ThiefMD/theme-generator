@@ -83,7 +83,11 @@ namespace ThiefMD.Enrichments {
                 return;
             }
 
-            if (!((GtkSource.Buffer)buffer).language.get_name ().down ().contains ("fountain")) {
+            var lang = ((GtkSource.Buffer)buffer).language;
+            if (lang == null || lang.get_name () == null) {
+                return;
+            }
+            if (!lang.get_name ().down ().contains ("fountain")) {
                 return;
             }
 
@@ -99,8 +103,6 @@ namespace ThiefMD.Enrichments {
             Gtk.TextIter start, end, cursor_iter;
             var cursor = buffer.get_insert ();
             buffer.get_iter_at_mark (out cursor_iter, cursor);
-            int current_cursor = cursor_iter.get_offset ();
-
             buffer.get_bounds (out start, out end);
             run_between_start_and_end (start, end);
             checking.unlock ();

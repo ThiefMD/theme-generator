@@ -60,7 +60,6 @@ namespace ThiefMD.Enrichments {
                 is_partial_list = new Regex ("^(\\s*([\\*\\-\\+\\>]|[0-9]+\\.))\\s+$", RegexCompileFlags.CASELESS, 0);
                 numerical_list = new Regex ("^(\\s*)([0-9]+)((\\.|\\))\\s+)$", RegexCompileFlags.CASELESS, 0);
                 is_url = new Regex ("^(http|ftp|ssh|mailto|tor|torrent|vscode|atom|rss|file)?s?(:\\/\\/)?(www\\.)?([a-zA-Z0-9\\.\\-]+)\\.([a-z]+)([^\\s]+)$", RegexCompileFlags.CASELESS, 0);
-                is_codeblock = new Regex ("(```[a-zA-Z]*[\\n\\r]((.*?)[\\n\\r])*?```[\\n\\r])", RegexCompileFlags.MULTILINE | RegexCompileFlags.CASELESS, 0);
                 is_markdown_url = new Regex ("(?<text_group>\\[(?>[^\\[\\]]+|(?&text_group))+\\])(?:\\((?<url>\\S+?)(?:[ ]\"(?<title>(?:[^\"]|(?<=\\\\)\")*?)\")?\\))", RegexCompileFlags.CASELESS, 0);
             } catch (Error e) {
                 warning ("Could not initialize regexes: %s", e.message);
@@ -175,7 +174,13 @@ namespace ThiefMD.Enrichments {
                 return;
             }
 
-            if (!((GtkSource.Buffer)buffer).language.get_name ().down ().contains ("markdown")) {
+            var lang = ((GtkSource.Buffer)buffer).language;
+            if (lang == null || lang.get_name () == null) {
+                return;
+            }
+            string lang_name = lang.get_name ().down ();
+
+            if (!lang_name.contains ("markdown")) {
                 if (view.left_margin != 0) {
                     Gtk.TextIter start, end;
                     buffer.get_bounds (out start, out end);
@@ -186,14 +191,14 @@ namespace ThiefMD.Enrichments {
                     for (int h = 0; h < 6; h++) {
                         buffer.remove_tag (heading_text[h], start, end);
                     }
-                    if (((GtkSource.Buffer)buffer).language.get_name ().down ().contains ("fountain")) {
+                    if (lang_name.contains ("fountain")) {
                         return;
                     }
                     view.left_margin = 0;
                     view.right_margin = 0;
                 }
                 return;
-            } else if (((GtkSource.Buffer)buffer).language.get_name ().down ().contains ("markdown")) {
+            } else if (lang_name.contains ("markdown")) {
                 view.left_margin = 80;
                 view.right_margin = 80;
             }

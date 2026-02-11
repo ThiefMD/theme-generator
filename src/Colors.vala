@@ -29,6 +29,8 @@ namespace ThiefMD {
         private void grab_color (ref ColorMapItem set_item, ref ColorTheme demo, ref Ultheme.HexColorPalette pal, Ultheme.HexColorPair item, bool dark) {
             bool fg_set = false;
             bool bg_set = false;
+            int max_light = demo.pallet.colors_light.length;
+            int max_dark = demo.pallet.colors_dark.length;
             if (item.foreground == pal.global.foreground) {
                 set_item.fg = -1;
                 fg_set = true;
@@ -43,7 +45,7 @@ namespace ThiefMD {
             if (dark) {
                 if (!fg_set) {
                     int search = -1;
-                    for (int i = 0;  i < on_dark_index; i++) {
+                    for (int i = 0;  i < on_dark_index && i < max_dark; i++) {
                         if (demo.pallet.colors_dark[i] == item.foreground) {
                             search = i;
                         }
@@ -51,14 +53,18 @@ namespace ThiefMD {
                     if (!fg_set && search != -1) {
                         set_item.fg = search;
                     } else if (!fg_set) {
-                        set_item.fg = on_dark_index;
-                        demo.pallet.colors_dark[on_dark_index] = item.foreground;
-                        on_dark_index++;
+                        if (on_dark_index < max_dark) {
+                            set_item.fg = on_dark_index;
+                            demo.pallet.colors_dark[on_dark_index] = item.foreground;
+                            on_dark_index++;
+                        } else {
+                            set_item.fg = -1;
+                        }
                     }
                 }
                 if (!bg_set) {
                     int search = -1;
-                    for (int i = 0;  i < on_dark_index; i++) {
+                    for (int i = 0;  i < on_dark_index && i < max_dark; i++) {
                         if (demo.pallet.colors_dark[i] == item.background) {
                             search = i;
                         }
@@ -66,15 +72,19 @@ namespace ThiefMD {
                     if (!bg_set && search != -1) {
                         set_item.bg = search;
                     } else if (!bg_set) {
-                        set_item.bg = on_dark_index;
-                        demo.pallet.colors_dark[on_dark_index] = item.background;
-                        on_dark_index++;
+                        if (on_dark_index < max_dark) {
+                            set_item.bg = on_dark_index;
+                            demo.pallet.colors_dark[on_dark_index] = item.background;
+                            on_dark_index++;
+                        } else {
+                            set_item.bg = -1;
+                        }
                     }
                 }
             } else {
                 if (!fg_set) {
                     int search = -1;
-                    for (int i = 0;  i < on_light_index; i++) {
+                    for (int i = 0;  i < on_light_index && i < max_light; i++) {
                         if (demo.pallet.colors_light[i] == item.foreground) {
                             search = i;
                         }
@@ -82,14 +92,18 @@ namespace ThiefMD {
                     if (!fg_set && search != -1) {
                         set_item.fg = search;
                     } else if (!fg_set) {
-                        set_item.fg = on_light_index;
-                        demo.pallet.colors_light[on_light_index] = item.foreground;
-                        on_light_index++;
+                        if (on_light_index < max_light) {
+                            set_item.fg = on_light_index;
+                            demo.pallet.colors_light[on_light_index] = item.foreground;
+                            on_light_index++;
+                        } else {
+                            set_item.fg = -1;
+                        }
                     }
                 }
                 if (!bg_set) {
                     int search = -1;
-                    for (int i = 0;  i < on_light_index; i++) {
+                    for (int i = 0;  i < on_light_index && i < max_light; i++) {
                         if (demo.pallet.colors_light[i] == item.background) {
                             search = i;
                         }
@@ -97,9 +111,13 @@ namespace ThiefMD {
                     if (!bg_set && search != -1) {
                         set_item.bg = search;
                     } else if (!bg_set) {
-                        set_item.bg = on_light_index;
-                        demo.pallet.colors_light[on_light_index] = item.background;
-                        on_light_index++;
+                        if (on_light_index < max_light) {
+                            set_item.bg = on_light_index;
+                            demo.pallet.colors_light[on_light_index] = item.background;
+                            on_light_index++;
+                        } else {
+                            set_item.bg = -1;
+                        }
                     }
                 }
             }
@@ -302,7 +320,7 @@ namespace ThiefMD {
         public void build_ultheme (string dest, string name, string author) {
             try {
                 Xml.Doc* res = new Xml.Doc ("1.0");
-                Xml.Ns* ns = new Xml.Ns (null, "", null);
+                Xml.Ns* ns = null;
                 // Create scheme
                 // print ("Creating root\n");
                 Xml.Node* root = new Xml.Node (ns, "theme");
@@ -559,7 +577,7 @@ namespace ThiefMD {
             Xml.Doc* res = new Xml.Doc ("1.0");
 
             // Create scheme
-            Xml.Ns* ns = new Xml.Ns (null, "", null);
+            Xml.Ns* ns = null;
             // print ("Creating root\n");
             Xml.Node* root = new Xml.Node (ns, "style-scheme");
             root->new_prop ("id", name.down () + "-" + ((dark) ? "dark" : "light"));

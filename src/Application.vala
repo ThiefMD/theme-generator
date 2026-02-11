@@ -34,8 +34,12 @@ namespace ThiefMD {
             File temp_location = File.new_for_path (temp_dir);
 
             if (!temp_location.query_exists ()) {
-                if (temp_location.make_directory_with_parents ()) {
-                    print ("Created temporary location: %s\n", temp_dir);
+                try {
+                    if (temp_location.make_directory_with_parents ()) {
+                        print ("Created temporary location: %s\n", temp_dir);
+                    }
+                } catch (Error e) {
+                    warning ("Could not create temporary location %s: %s", temp_dir, e.message);
                 }
             }
 
@@ -77,19 +81,25 @@ namespace ThiefMD {
                 }
             }
 
-            var language_picker = new Gtk.ComboBoxText ();
-            language_picker.append_text ("Markdown");
-            language_picker.append_text ("Fountain");
-            language_picker.append_text ("C/C++");
-            language_picker.append_text ("HTML");
-            language_picker.append_text ("Python");
-            language_picker.append_text ("C#");
-            language_picker.append_text ("Vala");
-            language_picker.append_text ("Rust");
-            language_picker.set_active (0);
+            var language_options = new Gtk.StringList ({
+                "Markdown",
+                "Fountain",
+                "C/C++",
+                "HTML",
+                "Python",
+                "C#",
+                "Vala",
+                "Rust"
+            });
+            var language_picker = new Gtk.DropDown (language_options, null);
+            language_picker.set_selected (0);
 
-            language_picker.changed.connect (() => {
-                var selected = language_picker.get_active_text ();
+            language_picker.notify["selected"].connect (() => {
+                uint selected_index = language_picker.get_selected ();
+                if (selected_index == Gtk.INVALID_LIST_POSITION) {
+                    return;
+                }
+                string? selected = language_options.get_string (selected_index);
                 if (selected == null) {
                     return;
                 }
@@ -677,12 +687,13 @@ namespace ThiefMD {
             return grid;
         }
 
-        Gtk.ColorButton light_fg;
-        Gtk.ColorButton light_bg;
-        Gtk.ColorButton[] light_pallet;
-        Gtk.ColorButton dark_fg;
-        Gtk.ColorButton dark_bg;
-        Gtk.ColorButton[] dark_pallet;
+        Gtk.ColorDialogButton light_fg;
+        Gtk.ColorDialogButton light_bg;
+        Gtk.ColorDialogButton[] light_pallet;
+        Gtk.ColorDialogButton dark_fg;
+        Gtk.ColorDialogButton dark_bg;
+        Gtk.ColorDialogButton[] dark_pallet;
+        private bool is_loading_theme = false;
         public Gtk.Grid pallet_grid () {
             Gtk.Grid grid = new Gtk.Grid ();
             grid.row_spacing = 6;
@@ -694,23 +705,26 @@ namespace ThiefMD {
             grid.attach (light_colors, 0, 0);
 
             light_fg = create_color_button (demo.pallet.foreground_light);
-            light_fg.set_title (_("Foreground Color"));
             light_fg.set_tooltip_text (_("Foreground Color"));
-            light_fg.color_set.connect (update_colors); 
+            light_fg.notify["rgba"].connect (() => {
+                update_colors ();
+            });
             grid.attach (light_fg, 1, 0);
 
             light_bg = create_color_button (demo.pallet.background_light);
-            light_bg.set_title (_("Background Color"));
             light_bg.set_tooltip_text (_("Background Color"));
-            light_bg.color_set.connect (update_colors); 
+            light_bg.notify["rgba"].connect (() => {
+                update_colors ();
+            });
             grid.attach (light_bg, 2, 0);
 
-            light_pallet = new Gtk.ColorButton[11];
+            light_pallet = new Gtk.ColorDialogButton[11];
             for (int i = 0; i < 11; i++) {
                 light_pallet[i] = create_color_button (demo.pallet.colors_light[i]);
-                light_pallet[i].set_title (_("Pallet Color"));
                 light_pallet[i].set_tooltip_text (_("Pallet Color"));
-                light_pallet[i].color_set.connect (update_colors); 
+                light_pallet[i].notify["rgba"].connect (() => {
+                    update_colors ();
+                });
                 grid.attach (light_pallet[i], 3 + i, 0);
             }
 
@@ -718,23 +732,26 @@ namespace ThiefMD {
             grid.attach (dark_colors, 0, 1);
 
             dark_fg = create_color_button (demo.pallet.foreground_dark);
-            dark_fg.set_title (_("Foreground Color"));
             dark_fg.set_tooltip_text (_("Foreground Color"));
-            dark_fg.color_set.connect (update_colors); 
+            dark_fg.notify["rgba"].connect (() => {
+                update_colors ();
+            });
             grid.attach (dark_fg, 1, 1);
 
             dark_bg = create_color_button (demo.pallet.background_dark);
-            dark_bg.set_title (_("Background Color"));
             dark_bg.set_tooltip_text (_("Background Color"));
-            dark_bg.color_set.connect (update_colors); 
+            dark_bg.notify["rgba"].connect (() => {
+                update_colors ();
+            });
             grid.attach (dark_bg, 2, 1);
 
-            dark_pallet = new Gtk.ColorButton[11];
+            dark_pallet = new Gtk.ColorDialogButton[11];
             for (int i = 0; i < 11; i++) {
                 dark_pallet[i] = create_color_button (demo.pallet.colors_dark[i]);
-                dark_pallet[i].set_title (_("Pallet Color"));
                 dark_pallet[i].set_tooltip_text (_("Pallet Color"));
-                dark_pallet[i].color_set.connect (update_colors); 
+                dark_pallet[i].notify["rgba"].connect (() => {
+                    update_colors ();
+                });
                 grid.attach (dark_pallet[i], 3 + i, 1);
             }
 
@@ -764,6 +781,7 @@ namespace ThiefMD {
         }
 
         private void reverse_update_colors () {
+            is_loading_theme = true;
             light_fg.rgba = color_to_rgba (demo.pallet.foreground_light);
             light_bg.rgba = color_to_rgba (demo.pallet.background_light);
 
@@ -778,12 +796,16 @@ namespace ThiefMD {
                 dark_pallet[i].rgba = color_to_rgba (demo.pallet.colors_dark[i]);
             }
 
+            is_loading_theme = false;
             state_change ();
             build_themes ();
             show_themes ();
         }
 
         private void update_colors () {
+            if (is_loading_theme) {
+                return;
+            }
             demo.pallet.foreground_light = get_hex_color (light_fg.get_rgba ());
             demo.pallet.background_light = get_hex_color (light_bg.get_rgba ());
 
@@ -803,7 +825,10 @@ namespace ThiefMD {
             show_themes ();
         }
 
-        private string get_hex_color (Gdk.RGBA rgba) {
+        private string get_hex_color (Gdk.RGBA? rgba) {
+            if (rgba == null) {
+                return "#FFFFFF";
+            }
             Ultheme.Color colour = Ultheme.Color.from_string ("#FFFFFF");
             colour.red = (uint8)(255 * rgba.red);
             colour.green = (uint8)(255 * rgba.green);

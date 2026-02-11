@@ -8,23 +8,23 @@ namespace ThiefMD {
         string name,
         OnFileCallback callback)
     {
-        var action = Gtk.FileChooserAction.SAVE;
-        var chooser = new Gtk.FileChooserNative (title, null, action, "_Save", "_Cancel");
+        var dialog = new Gtk.FileDialog ();
+        dialog.set_title (title);
         var suggestion = name.replace (" ", "-").replace ("/", "-").replace ("\\", "-");
         if (suggestion == "") {
             suggestion = "my-great-theme";
         }
-        chooser.action = action;
+        var filters = new GLib.ListStore (typeof (Gtk.FileFilter));
+        Gtk.FileFilter? default_filter = null;
 
         if (ext == "xml") {
             var xml = new Gtk.FileFilter ();
             xml.set_filter_name (_("XML file"));
             xml.add_mime_type ("application/xml");
             xml.add_pattern ("*.xml");
-            chooser.add_filter (xml);
-
-            chooser.set_current_name (suggestion + ".xml");
-            chooser.set_filter (xml);
+            filters.append (xml);
+            default_filter = xml;
+            dialog.set_initial_name (suggestion + ".xml");
         }
 
         if (ext == "ultheme") {
@@ -32,41 +32,55 @@ namespace ThiefMD {
             ultheme.set_filter_name (_("Ulysses Theme"));
             ultheme.add_mime_type ("application/zip");
             ultheme.add_pattern ("*.ultheme");
-            chooser.add_filter (ultheme);
-
-            chooser.set_current_name (suggestion + ".ultheme");
-            chooser.set_filter (ultheme);
+            filters.append (ultheme);
+            default_filter = ultheme;
+            dialog.set_initial_name (suggestion + ".ultheme");
         }
 
-        chooser.response.connect ((response) => {
-            if (response == Gtk.ResponseType.ACCEPT) {
-                File target = chooser.get_file ();
-                callback (target);
+        if (filters.get_n_items () > 0) {
+            dialog.set_filters (filters);
+        }
+        if (default_filter != null) {
+            dialog.set_default_filter (default_filter);
+        }
+
+        dialog.save.begin (null, null, (obj, res) => {
+            try {
+                File target = dialog.save.end (res);
+                if (target != null) {
+                    callback (target);
+                }
+            } catch (Error e) {
+                warning ("Could not save file: %s", e.message);
             }
         });
-        chooser.show ();
     }
 
     public void get_open_file (
         string title,
         OnFileCallback callback)
     {
-        var action = Gtk.FileChooserAction.OPEN;
-        var chooser = new Gtk.FileChooserNative (title, null, action, "_Open", "_Cancel");
-        chooser.action = action;
+        var dialog = new Gtk.FileDialog ();
+        dialog.set_title (title);
 
         var ultheme = new Gtk.FileFilter ();
         ultheme.set_filter_name (_("Ulysses Theme"));
         ultheme.add_pattern ("*.ultheme");
-        chooser.add_filter (ultheme);
+        var filters = new GLib.ListStore (typeof (Gtk.FileFilter));
+        filters.append (ultheme);
+        dialog.set_filters (filters);
+        dialog.set_default_filter (ultheme);
 
-        chooser.response.connect ((response) => {
-            if (response == Gtk.ResponseType.ACCEPT) {
-                File target = chooser.get_file ();
-                callback (target);
+        dialog.open.begin (null, null, (obj, res) => {
+            try {
+                File target = dialog.open.end (res);
+                if (target != null) {
+                    callback (target);
+                }
+            } catch (Error e) {
+                warning ("Could not open file: %s", e.message);
             }
         });
-        chooser.show ();
     }
 
     public bool write_ultheme_archive (string target_name) {
@@ -75,8 +89,9 @@ namespace ThiefMD {
         return success;
     }
 
-    public Gtk.ColorButton create_color_button (string new_color) {
-        Gtk.ColorButton button;
+    public Gtk.ColorDialogButton create_color_button (string new_color) {
+        var dialog = new Gtk.ColorDialog ();
+        Gtk.ColorDialogButton button = new Gtk.ColorDialogButton (dialog);
         try {
             Regex valid_color = new Regex ("^#[A-Fa-f0-9]{6}$");
             GLib.MatchInfo info = null;
@@ -88,15 +103,11 @@ namespace ThiefMD {
                     blue = color.blue / 255.0f,
                     alpha = 1.0f
                 };
-                button = new Gtk.ColorButton.with_rgba (colour);
-                return button;
+                button.rgba = colour;
             }
         } catch (Error e) {
             warning ("Could not set color: %s", e.message);
         }
-
-        button = new Gtk.ColorButton ();
-
         return button;
     }
 
