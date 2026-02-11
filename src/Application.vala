@@ -62,13 +62,20 @@ namespace ThiefMD {
             string custom_languages = Path.build_path (
                 Path.DIR_SEPARATOR_S,
                 Build.PKGDATADIR,
-                "gtksourceview-4",
+                "gtksourceview-5",
                 "language-specs");
             string[] language_paths = {
                 custom_languages
             };
             manager.set_search_path (language_paths);
             var language = manager.guess_language (null, "text/markdown");
+            if (language == null) {
+                var default_manager = GtkSource.LanguageManager.get_default ();
+                language = default_manager.guess_language (null, "text/markdown");
+                if (language == null) {
+                    language = default_manager.get_language ("markdown");
+                }
+            }
 
             var language_picker = new Gtk.ComboBoxText ();
             language_picker.append_text ("Markdown");
@@ -83,50 +90,78 @@ namespace ThiefMD {
 
             language_picker.changed.connect (() => {
                 var selected = language_picker.get_active_text ();
+                if (selected == null) {
+                    return;
+                }
                 switch (selected.down ()) {
                     case "markdown":
                         language = manager.guess_language (null, "text/markdown");
-                        buffer_dark.set_text (IPSUM);
-                        buffer_light.set_text (IPSUM);
                         break;
                     case "fountain":
                         language = manager.guess_language (null, "text/fountain");
-                        buffer_dark.set_text (fountain);
-                        buffer_light.set_text (fountain);
                         break;
                     case "c/c++":
                         language = manager.guess_language (null, "text/x-cpp");
-                        buffer_dark.set_text (c);
-                        buffer_light.set_text (c);
                         break;
                     case "html":
                         language = manager.guess_language (null, "text/html");
-                        buffer_dark.set_text (html);
-                        buffer_light.set_text (html);
                         break;
                     case "python":
                         language = manager.guess_language (null, "text/x-python3");
-                        buffer_dark.set_text (py);
-                        buffer_light.set_text (py);
                         break;
                     case "c#":
                         language = manager.guess_language (null, "text/x-csharp");
-                        buffer_dark.set_text (cs);
-                        buffer_light.set_text (cs);
                         break;
                     case "vala":
                         language = manager.guess_language (null, "text/x-vala");
-                        buffer_dark.set_text (cs);
-                        buffer_light.set_text (cs);
                         break;
                     case "rust":
                         language = manager.guess_language (null, "text/rust");
-                        buffer_dark.set_text (rust);
-                        buffer_light.set_text (rust);
                         break;
+                }
+                if (language == null) {
+                    var default_manager = GtkSource.LanguageManager.get_default ();
+                    language = default_manager.guess_language (null, "text/markdown");
+                    if (language == null) {
+                        language = default_manager.get_language ("markdown");
+                    }
                 }
                 buffer_light.set_language (language);
                 buffer_dark.set_language (language);
+                switch (selected.down ()) {
+                    case "markdown":
+                        buffer_dark.text = IPSUM;
+                        buffer_light.text = IPSUM;
+                        break;
+                    case "fountain":
+                        buffer_dark.text = fountain;
+                        buffer_light.text = fountain;
+                        break;
+                    case "c/c++":
+                        buffer_dark.text = c;
+                        buffer_light.text = c;
+                        break;
+                    case "html":
+                        buffer_dark.text = html;
+                        buffer_light.text = html;
+                        break;
+                    case "python":
+                        buffer_dark.text = py;
+                        buffer_light.text = py;
+                        break;
+                    case "c#":
+                        buffer_dark.text = cs;
+                        buffer_light.text = cs;
+                        break;
+                    case "vala":
+                        buffer_dark.text = cs;
+                        buffer_light.text = cs;
+                        break;
+                    case "rust":
+                        buffer_dark.text = rust;
+                        buffer_light.text = rust;
+                        break;
+                }
                 light_enrich.recheck_all ();
                 dark_enrich.recheck_all ();
                 dark_fountain.recheck_all ();
@@ -819,8 +854,20 @@ namespace ThiefMD {
             demo.build_darkscheme (dark_path, "demo", "demo");
             light_path = Path.build_filename (temp_dir, "demo-light.xml");
             demo.build_lightscheme (light_path, "demo", "demo");
-            ultheme_path = Path.build_filename (temp_dir, "DemoTheme.xml");
-            demo.build_ultheme (ultheme_path, "demo", "demo");
+            try {
+                string[] cleanup_files = {
+                    Path.build_filename (temp_dir, "DemoTheme.xml"),
+                    Path.build_filename (temp_dir, "Theme.xml")
+                };
+                foreach (var file_path in cleanup_files) {
+                    var file = File.new_for_path (file_path);
+                    if (file.query_exists ()) {
+                        file.delete ();
+                    }
+                }
+            } catch (Error e) {
+                warning ("Could not clean up demo theme: %s", e.message);
+            }
         }
 
         private void show_themes () {
