@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2018 Miles Wallio <mwallio@gmail.com> -->
-<component type="desktop">
-  <id>io.github.thiefmd.themegenerator.desktop</id>
+<component type="desktop-application">
+  <id>io.github.thiefmd.themegenerator</id>
   <metadata_license>MIT</metadata_license>
   <project_license>MIT</project_license>
   <name>ThemeGenerator</name>
-  <launchable type="desktop-id">io.github.thiefmd.themegenerator.desktop</launchable>
-  <summary>Generate Styles with Style.</summary>
+  <summary>Generate Styles with Style</summary>
   <description>
     <p>Need to generate a Ultheme or GtkSourceView Scheme for Markdown? Look no further.</p>
     <p>Themes are compatible with ThiefMD, gedit, GNOME Builder, Editors based on GtkSourceView, and Ulysses.</p>
   </description>
-  <developer_name>kmwallio</developer_name>
+  <developer id="io.github.kmwallio">
+    <name>kmwallio</name>
+  </developer>
   <url type="homepage">https://github.com/ThiefMD/theme-generator</url>
   <url type="bugtracker">https://github.com/ThiefMD/theme-generator/issues</url>
+  <url type="vcs-browser">https://github.com/ThiefMD/theme-generator</url>
   <url type="help">https://themes.thiefmd.com/howto</url>
+  <launchable type="desktop-id">io.github.thiefmd.themegenerator.desktop</launchable>
   <content_rating type="oars-1.1">
     <content_attribute id="language-humor">mild</content_attribute>
   </content_rating>
-  <categories>
-    <category>Utility</category>
-  </categories>
-  <keywords>
-    <keyword>markdown</keyword>
-    <keyword>ulysses</keyword>
-    <keyword>customization</keyword>
-    <keyword>gtksourceview</keyword>
-    <keyword>sourceview</keyword>
-    <keyword>thiefmd</keyword>
-  </keywords>
+  <provides>
+    <id>io.github.thiefmd.themegenerator.desktop</id>
+  </provides>
+  <replaces>
+      <id>io.github.thiefmd.themegenerator.desktop</id>
+  </replaces>
   <screenshots>
     <screenshot type="default">
       <caption>Theme Generator Window</caption>
@@ -52,6 +50,12 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.1.4" date="2026-02-11" urgency="low">
+      <description>
+        <p>Updated to GTK4 and GtkSourceView 5</p>
+      </description>
+      <url>https://github.com/ThiefMD/theme-generator/releases/tag/v0.1.4</url>
+    </release>
     <release version="0.1.3" date="2022-07-09" urgency="low">
       <description>
         <p>Maintanence release for updating build to latest SDK</p>
